@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LMS · ChulaXL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+Thai:ital,wght@0,500;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  @font-face { font-family: "Chulalongkorn"; src: url("fonts/CHULALONGKORNBold.otf") format("opentype"); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Chulalongkorn"; src: url("fonts/CHULALONGKORNReg.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: "ChulaCharas"; src: url("fonts/ChulaCharasNewBold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { font-family: "IBM Plex Sans Thai", "Manrope", system-ui, sans-serif; background: var(--ink-900); color: #fff; overflow-x: hidden; }
+
+  /* ───── TOP BAR ───── */
+  .lms-topbar {
+    background: var(--ink-900);
+    color: #fff;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 10px 24px;
+    display: flex; align-items: center; gap: 16px;
+    height: 64px;
+    position: sticky; top: 0;
+    z-index: 30;
+  }
+  .lms-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 8px;
+    color: #fff; font-size: 13px; font-weight: 600;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: background .15s;
+  }
+  .lms-back:hover { background: rgba(255,255,255,.12); }
+  .lms-brand img { height: 28px; width: auto; display: block; }
+  .lms-title {
+    flex: 1;
+    font-family: "Chulalongkorn", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding: 0 16px;
+    border-left: 1px solid rgba(255,255,255,.1);
+  }
+  .lms-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .lms-action {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 99px;
+    color: #fff;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  .lms-action:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.3); }
+  .lms-action.star { color: #FCD34D; }
+  .lms-progress-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px 6px 10px;
+    background: rgba(229,0,122,.18);
+    border: 1px solid var(--pink-500);
+    border-radius: 99px;
+    font-size: 12.5px; font-weight: 700;
+    color: var(--pink-200);
+  }
+  .lms-progress-pill .ring {
+    width: 22px; height: 22px;
+    border-radius: 99px;
+    background: conic-gradient(var(--pink-500) 0% 64%, rgba(255,255,255,.15) 64% 100%);
+    position: relative;
+    display: grid; place-items: center;
+  }
+  .lms-progress-pill .ring::after {
+    content: ""; position: absolute; inset: 3px; border-radius: 99px; background: var(--ink-900);
+  }
+  .lms-progress-pill .ring span {
+    position: relative; z-index: 1;
+    font-size: 9px; color: #fff;
+  }
+
+  /* ───── MAIN GRID ───── */
+  .lms-main {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    min-height: calc(100vh - 64px);
+    background: #fff;
+    color: var(--ink-900);
+  }
+  .lms-content {
+    background: #fff;
+    overflow-y: auto;
+    max-height: calc(100vh - 64px);
+  }
+  .lms-sidebar {
+    background: #fff;
+    border-left: 1px solid var(--ink-200);
+    overflow-y: auto;
+    max-height: calc(100vh - 64px);
+  }
+
+  /* ───── VIDEO PLAYER ───── */
+  .video-wrap {
+    background: #000;
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .video-poster {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.65);
+  }
+  .video-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.2) 0%, transparent 30%, transparent 70%, rgba(0,0,0,.85) 100%);
+    z-index: 1;
+  }
+  .video-play {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 88px; height: 88px;
+    border-radius: 99px;
+    background: rgba(255,255,255,.95);
+    color: var(--pink-700);
+    display: grid; place-items: center;
+    z-index: 2;
+    transition: transform .15s;
+    cursor: pointer;
+    border: 0;
+  }
+  .video-play:hover { transform: translate(-50%, -50%) scale(1.08); }
+  .video-lecture-label {
+    position: absolute; top: 16px; left: 20px;
+    z-index: 2;
+    background: rgba(0,0,0,.5);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 12.5px; font-weight: 600;
+    backdrop-filter: blur(8px);
+  }
+
+  .video-controls {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 16px 20px 12px;
+    z-index: 3;
+    color: #fff;
+  }
+  .video-bar {
+    height: 5px;
+    background: rgba(255,255,255,.25);
+    border-radius: 99px;
+    overflow: hidden;
+    cursor: pointer;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .video-bar .fill {
+    height: 100%; width: 36%;
+    background: var(--pink-500);
+    border-radius: 99px;
+    transition: width .15s;
+  }
+  .video-bar .knob {
+    position: absolute;
+    left: 36%;
+    top: 50%; transform: translate(-50%, -50%);
+    width: 14px; height: 14px;
+    border-radius: 99px;
+    background: #fff;
+    border: 3px solid var(--pink-500);
+    box-shadow: 0 2px 8px rgba(0,0,0,.4);
+  }
+  .video-ctrl-row {
+    display: flex; align-items: center; gap: 16px;
+    font-size: 13px; font-weight: 500;
+  }
+  .video-ctrl-row button {
+    background: none; border: 0; color: #fff;
+    cursor: pointer;
+    width: 32px; height: 32px;
+    border-radius: 99px;
+    display: grid; place-items: center;
+    transition: background .15s;
+  }
+  .video-ctrl-row button:hover { background: rgba(255,255,255,.18); }
+  .video-time { opacity: .85; }
+  .video-spacer { flex: 1; }
+  .video-rate {
+    padding: 4px 10px;
+    background: rgba(255,255,255,.12);
+    border-radius: 6px;
+    font-size: 12px; font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* ───── BREADCRUMB + LECTURE INFO ───── */
+  .lecture-bar {
+    background: #fff;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--ink-200);
+  }
+  .lecture-meta {
+    font-size: 12px;
+    color: var(--ink-500);
+    margin-bottom: 4px;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .lecture-meta strong { color: var(--pink-700); font-weight: 700; }
+  .lecture-title-h2 {
+    font-family: "Chulalongkorn", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    color: var(--ink-900);
+  }
+  .lecture-actions {
+    display: flex; gap: 8px; margin-top: 12px;
+  }
+  .lecture-actions button {
+    padding: 7px 14px;
+    background: var(--ink-50);
+    border: 1px solid var(--ink-200);
+    border-radius: 99px;
+    font-size: 12.5px; font-weight: 600;
+    color: var(--ink-700);
+    display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer;
+    transition: border-color .15s, color .15s;
+  }
+  .lecture-actions button:hover { border-color: var(--pink-500); color: var(--pink-700); }
+
+  /* ───── TABS ───── */
+  .lms-tabs {
+    background: #fff;
+    border-bottom: 1px solid var(--ink-200);
+    padding: 0 28px;
+    display: flex; gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky; top: 0; z-index: 5;
+  }
+  .lms-tabs::-webkit-scrollbar { display: none; }
+  .lms-tab {
+    padding: 14px 16px;
+    background: none; border: 0;
+    font-size: 14px; font-weight: 600;
+    color: var(--ink-500);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color .15s;
+  }
+  .lms-tab:hover { color: var(--ink-900); }
+  .lms-tab.active {
+    color: var(--ink-900);
+    border-bottom-color: var(--pink-500);
+  }
+  .tab-panel {
+    padding: 28px;
+    display: none;
+  }
+  .tab-panel.active { display: block; }
+
+  .tab-panel h3 {
+    font-family: "Chulalongkorn", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    color: var(--ink-900);
+  }
+  .tab-panel p { color: var(--ink-700); font-size: 14.5px; line-height: 1.65; margin: 0 0 12px; }
+  .tab-panel ul { color: var(--ink-700); font-size: 14.5px; line-height: 1.65; }
+
+  /* Q&A */
+  .qa-item {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--ink-100);
+    display: flex; gap: 14px;
+  }
+  .qa-avatar {
+    width: 40px; height: 40px; border-radius: 99px;
+    display: grid; place-items: center;
+    color: #fff; font-weight: 700; font-size: 14px;
+    flex-shrink: 0;
+    font-family: var(--font-display);
+  }
+  .qa-body { flex: 1; }
+  .qa-name { font-weight: 700; color: var(--ink-900); font-size: 14px; }
+  .qa-when { font-size: 12px; color: var(--ink-500); margin-bottom: 6px; }
+  .qa-q { font-size: 14.5px; color: var(--ink-800); margin-bottom: 6px; font-weight: 600; }
+  .qa-a { font-size: 13.5px; color: var(--ink-600); padding: 10px 14px; background: var(--ink-50); border-radius: 8px; border-left: 3px solid var(--pink-500); }
+
+  /* Notes */
+  .notes-input {
+    width: 100%;
+    min-height: 100px;
+    border: 1px solid var(--ink-200);
+    border-radius: 10px;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink-900);
+    resize: vertical;
+    margin-bottom: 12px;
+  }
+  .notes-input:focus { outline: none; border-color: var(--pink-500); }
+  .note-card {
+    background: #FFFBEB;
+    border: 1px solid #FCD34D;
+    border-left: 4px solid #F59E0B;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .note-card .ts { font-size: 12px; color: var(--pink-700); font-weight: 700; }
+  .note-card .text { font-size: 14px; color: var(--ink-800); margin-top: 4px; }
+
+  /* Announcements */
+  .ann-card {
+    background: #fff;
+    border: 1px solid var(--ink-200);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+  .ann-head { display: flex; gap: 12px; margin-bottom: 10px; align-items: center; }
+  .ann-when { font-size: 12px; color: var(--ink-500); }
+  .ann-title { font-family: "Chulalongkorn", sans-serif; font-weight: 700; font-size: 16px; color: var(--ink-900); margin-bottom: 6px; }
+  .ann-body { font-size: 14px; color: var(--ink-700); line-height: 1.6; }
+
+  /* Learning tools */
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .tool-card {
+    border: 1px solid var(--ink-200);
+    border-radius: 12px;
+    padding: 18px;
+    text-decoration: none;
+    color: inherit;
+    display: flex; gap: 12px; align-items: flex-start;
+    transition: border-color .15s, transform .15s;
+  }
+  .tool-card:hover { border-color: var(--pink-500); transform: translateY(-2px); }
+  .tool-card .ic { width: 36px; height: 36px; border-radius: 8px; background: var(--pink-50); color: var(--pink-700); display: grid; place-items: center; flex-shrink: 0; }
+  .tool-card .name { font-weight: 700; font-size: 14px; color: var(--ink-900); }
+  .tool-card .sub { font-size: 12px; color: var(--ink-500); margin-top: 2px; }
+
+  /* ───── SIDEBAR (Course content) ───── */
+  .sb-head {
+    padding: 18px 22px 12px;
+    border-bottom: 1px solid var(--ink-200);
+    background: #fff;
+    position: sticky; top: 0; z-index: 5;
+  }
+  .sb-head h3 {
+    font-family: "Chulalongkorn", sans-serif;
+    font-size: 16px; font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--ink-900);
+  }
+  .sb-head .stat { font-size: 12px; color: var(--ink-500); }
+  .sb-progress-bar {
+    height: 4px;
+    background: var(--ink-100);
+    border-radius: 99px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .sb-progress-bar span { display: block; height: 100%; background: var(--pink-500); }
+
+  .sb-section { border-bottom: 1px solid var(--ink-100); }
+  .sb-section-head {
+    padding: 14px 22px;
+    background: var(--ink-50);
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 8px;
+  }
+  .sb-section-head:hover { background: var(--ink-100); }
+  .sb-section-title { font-family: "Chulalongkorn", sans-serif; font-weight: 700; font-size: 14px; color: var(--ink-900); }
+  .sb-section-meta { font-size: 11.5px; color: var(--ink-500); margin-top: 2px; }
+  .sb-section-ch {
+    width: 18px; height: 18px;
+    display: grid; place-items: center;
+    transition: transform .2s;
+    color: var(--ink-600);
+  }
+  .sb-section.open .sb-section-ch { transform: rotate(90deg); }
+  .sb-section-body { display: none; }
+  .sb-section.open .sb-section-body { display: block; }
+
+  .sb-lec {
+    padding: 11px 22px 11px 22px;
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
+    border-top: 1px solid var(--ink-100);
+    transition: background .12s;
+  }
+  .sb-lec:hover { background: var(--pink-50); }
+  .sb-lec.current { background: var(--pink-50); border-left: 3px solid var(--pink-500); padding-left: 19px; }
+  .sb-lec.done .check { background: var(--pink-500); border-color: var(--pink-500); color: #fff; }
+  .sb-lec .check {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    border: 1.5px solid var(--ink-300);
+    display: grid; place-items: center;
+    color: transparent;
+    background: #fff;
+  }
+  .sb-lec.done .check svg { color: #fff; }
+  .sb-lec .info { min-width: 0; }
+  .sb-lec .lec-type {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10.5px; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-500);
+  }
+  .sb-lec .lec-type.quiz { color: var(--pink-700); }
+  .sb-lec .title {
+    font-size: 13.5px;
+    color: var(--ink-800);
+    line-height: 1.35;
+    margin-top: 1px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .sb-lec.current .title { color: var(--pink-700); font-weight: 700; }
+  .sb-lec .dur { font-size: 11.5px; color: var(--ink-500); }
+
+  /* ───── QUIZ OVERLAY ───── */
+  .quiz-overlay {
+    position: fixed; inset: 0;
+    background: rgba(15,10,20,.65);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .quiz-overlay.open { display: flex; animation: q-fade .2s ease; }
+  @keyframes q-fade { from {opacity:0;} to {opacity:1;} }
+
+  .quiz-modal {
+    background: #fff;
+    color: var(--ink-900);
+    border-radius: 20px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.5);
+    animation: q-pop .25s ease;
+  }
+  @keyframes q-pop { from {opacity:0; transform: translateY(10px) scale(.98);} to {opacity:1; transform:none;} }
+  .quiz-head {
+    padding: 26px 32px;
+    border-bottom: 1px solid var(--ink-100);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+  }
+  .quiz-head h2 {
+    font-family: "Chulalongkorn", sans-serif;
+    font-size: 22px; font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .quiz-head .meta { font-size: 13px; color: var(--ink-500); }
+  .quiz-close {
+    background: var(--ink-100); border: 0;
+    width: 36px; height: 36px; border-radius: 99px;
+    display: grid; place-items: center;
+    color: var(--ink-700); cursor: pointer; flex-shrink: 0;
+  }
+  .quiz-close:hover { background: var(--ink-200); }
+
+  .quiz-progress {
+    padding: 14px 32px;
+    background: var(--pink-50);
+    font-size: 12.5px;
+    color: var(--pink-700);
+    font-weight: 700;
+    border-bottom: 1px solid var(--pink-100);
+    display: flex; gap: 14px; align-items: center;
+  }
+  .quiz-progress .bar { flex: 1; height: 4px; background: rgba(229,0,122,.2); border-radius: 99px; overflow: hidden; }
+  .quiz-progress .bar span { display: block; height: 100%; background: var(--pink-500); transition: width .3s; }
+
+  .quiz-body { padding: 28px 32px; }
+  .quiz-q {
+    font-family: "Chulalongkorn", sans-serif;
+    font-size: 20px; font-weight: 700;
+    line-height: 1.35;
+    color: var(--ink-900);
+    margin-bottom: 22px;
+  }
+  .quiz-opts { display: grid; gap: 10px; margin-bottom: 22px; }
+  .quiz-opt {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 14px; align-items: center;
+    padding: 14px 18px;
+    border: 2px solid var(--ink-200);
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 14.5px;
+    color: var(--ink-800);
+    transition: border-color .15s, background .15s;
+    text-align: left;
+  }
+  .quiz-opt:hover:not(.locked) { border-color: var(--pink-300); background: var(--pink-50); }
+  .quiz-opt .letter {
+    width: 28px; height: 28px; border-radius: 99px;
+    background: var(--ink-100); color: var(--ink-700);
+    font-weight: 700;
+    display: grid; place-items: center;
+    font-size: 13px;
+  }
+  .quiz-opt.selected { border-color: var(--pink-500); background: var(--pink-50); }
+  .quiz-opt.selected .letter { background: var(--pink-500); color: #fff; }
+  .quiz-opt.correct { border-color: #10B981; background: #ECFDF5; }
+  .quiz-opt.correct .letter { background: #10B981; color: #fff; }
+  .quiz-opt.wrong { border-color: #DC2626; background: #FEF2F2; }
+  .quiz-opt.wrong .letter { background: #DC2626; color: #fff; }
+  .quiz-opt .fb { font-size: 18px; }
+  .quiz-explanation {
+    padding: 14px 18px;
+    background: var(--ink-50);
+    border-left: 3px solid var(--pink-500);
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: var(--ink-700);
+    line-height: 1.55;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .quiz-explanation.show { display: block; }
+  .quiz-explanation strong { color: var(--ink-900); font-weight: 700; }
+
+  .quiz-foot {
+    padding: 18px 32px;
+    border-top: 1px solid var(--ink-100);
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  }
+  .quiz-foot .skip {
+    background: none; border: 0;
+    color: var(--ink-500); font-size: 13.5px; font-weight: 600;
+    cursor: pointer;
+    padding: 8px 0;
+  }
+  .quiz-foot .skip:hover { color: var(--ink-900); }
+
+  /* Quiz results */
+  .quiz-result { text-align: center; padding: 36px 32px; }
+  .quiz-result .badge-big {
+    width: 96px; height: 96px;
+    border-radius: 99px;
+    display: grid; place-items: center;
+    margin: 0 auto 20px;
+    font-size: 44px;
+  }
+  .quiz-result .badge-big.pass { background: #ECFDF5; color: #10B981; }
+  .quiz-result .badge-big.fail { background: #FEF2F2; color: #DC2626; }
+  .quiz-result h3 {
+    font-family: "Chulalongkorn", sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .quiz-result .score {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 18px;
+    color: var(--ink-700);
+    margin-bottom: 24px;
+  }
+  .quiz-result .actions { display: flex; gap: 10px; justify-content: center; }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .lms-main { grid-template-columns: 1fr; }
+    .lms-sidebar { max-height: none; border-left: 0; border-top: 1px solid var(--ink-200); }
+    .lms-content { max-height: none; }
+  }
+  @media (max-width: 720px) {
+    .lms-title { display: none; }
+    .lms-actions .lbl { display: none; }
+    .lms-tabs { padding: 0 16px; }
+    .tab-panel { padding: 20px 16px; }
+    .video-play { width: 64px; height: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="lms-topbar">
+  <a href="course-detail.html" id="back-link" class="lms-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18 9 12l6-6"/></svg>
+    <span>กลับ</span>
+  </a>
+  <a href="index.html" class="lms-brand">
+    <img src="https://d1xutesu22jhtx.cloudfront.net/paas-landing-web/lll-cu-landing/logo/lll-logo.png" alt="ChulaXL" style="background:#fff; padding:5px 9px; border-radius:6px;" />
+  </a>
+  <div class="lms-title" id="topbar-title">กำลังโหลด…</div>
+
+  <div class="lms-actions">
+    <button class="lms-action star">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 16.5 14 18 21 12 17 6 21 7.5 14 2 9.5 9 9"/></svg>
+      <span class="lbl">ให้คะแนนคอร์ส</span>
+    </button>
+    <div class="lms-progress-pill" title="ความก้าวหน้า">
+      <span class="ring"><span>64</span></span>
+      <span>ความก้าวหน้า 64%</span>
+    </div>
+    <button class="lms-action">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.5 10.5 7-4M8.5 13.5l7 4"/></svg>
+      <span class="lbl">แชร์</span>
+    </button>
+  </div>
+</header>
+
+<div class="lms-main">
+
+  <main class="lms-content">
+
+    <!-- Video player -->
+    <div class="video-wrap" id="video-wrap">
+      <img class="video-poster" id="video-poster" alt="" />
+      <div class="video-overlay"></div>
+      <span class="video-lecture-label" id="video-lecture-label">บทที่ 1 · ตัวอย่างเรียน</span>
+      <button class="video-play" aria-label="เล่นวิดีโอ">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+
+      <div class="video-controls">
+        <div class="video-bar"><div class="fill"></div><div class="knob"></div></div>
+        <div class="video-ctrl-row">
+          <button aria-label="เล่น/หยุด"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+          <button aria-label="ย้อนกลับ 10 วินาที"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+          <button aria-label="ถัดไป 10 วินาที"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:scaleX(-1);"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+          <span class="video-time" id="video-time">2:54 / 8:04</span>
+          <span class="video-spacer"></span>
+          <span class="video-rate">1.0x</span>
+          <button aria-label="คำบรรยาย"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M7 14h4M13 14h4"/></svg></button>
+          <button aria-label="ตั้งค่า"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9 1.65 1.65 0 0 0 4.27 7.18l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9 1.65 1.65 0 0 0 20.91 10H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+          <button aria-label="เต็มจอ"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lecture info bar -->
+    <div class="lecture-bar">
+      <div class="lecture-meta" id="lecture-meta"></div>
+      <h2 class="lecture-title-h2" id="lecture-title"></h2>
+      <div class="lecture-actions">
+        <button onclick="addNote()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> เพิ่มโน้ตที่จุดนี้</button>
+        <button><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg> ถามอาจารย์</button>
+        <button><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg> ดาวน์โหลด</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <nav class="lms-tabs">
+      <button class="lms-tab active" data-tab="overview">Overview</button>
+      <button class="lms-tab" data-tab="qa">Q&amp;A</button>
+      <button class="lms-tab" data-tab="notes">Notes</button>
+      <button class="lms-tab" data-tab="ann">ประกาศ</button>
+      <button class="lms-tab" data-tab="reviews">รีวิว</button>
+      <button class="lms-tab" data-tab="tools">เครื่องมือเรียน</button>
+    </nav>
+
+    <div class="tab-panel active" data-panel="overview" id="panel-overview"></div>
+    <div class="tab-panel" data-panel="qa" id="panel-qa"></div>
+    <div class="tab-panel" data-panel="notes" id="panel-notes"></div>
+    <div class="tab-panel" data-panel="ann" id="panel-ann"></div>
+    <div class="tab-panel" data-panel="reviews" id="panel-reviews"></div>
+    <div class="tab-panel" data-panel="tools" id="panel-tools"></div>
+
+  </main>
+
+  <aside class="lms-sidebar">
+    <div class="sb-head">
+      <h3>เนื้อหาคอร์ส</h3>
+      <div class="stat" id="sb-stat"></div>
+      <div class="sb-progress-bar"><span style="width:64%"></span></div>
+    </div>
+    <div id="sb-sections"></div>
+  </aside>
+
+</div>
+
+<!-- Quiz overlay -->
+<div class="quiz-overlay" id="quiz-overlay">
+  <div class="quiz-modal" id="quiz-modal"></div>
+</div>
+
+<script src="course-data.js"></script>
+<script src="lms.js"></script>
+</body>
+</html>

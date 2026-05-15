@@ -1,0 +1,1963 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ChulaXL — Lifelong Learning by Chulalongkorn University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+Thai:ital,wght@0,500;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Chula brand fonts (uploaded into fonts/) */
+  /* "Chulalongkorn" — display/headline font designed for the university brand */
+  @font-face {
+    font-family: "Chulalongkorn";
+    src: url("fonts/CHULALONGKORNBold.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Chulalongkorn";
+    src: url("fonts/CHULALONGKORNReg.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  /* "Chula Charas" — Thai serif for body / accent italic */
+  @font-face {
+    font-family: "ChulaCharas";
+    src: url("fonts/ChulaCharasNewBold.ttf") format("truetype");
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "ChulaCharas";
+    src: url("fonts/ChulaCharasNewReg.ttf") format("truetype");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "ChulaCharas";
+    src: url("fonts/ChulaCharasNewIta.ttf") format("truetype");
+    font-weight: 400; font-style: italic; font-display: swap;
+  }
+
+  /* Apply Chulalongkorn font to hero headline */
+  .hero h1 {
+    font-family: "Chulalongkorn", "IBM Plex Sans Thai", "Manrope", system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  /* Accent "จุฬาลงกรณ์มหาวิทยาลัย" — same Chulalongkorn font, Chula identity pink */
+  .hero h1 .accent {
+    font-family: "Chulalongkorn", "IBM Plex Sans Thai", "Manrope", system-ui, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    color: var(--pink-500);
+    background: none;
+    -webkit-text-fill-color: var(--pink-500);
+  }
+  .brand-logo { height: 40px; width: auto; display: block; }
+  /* real course cover images */
+  .course-cover img.cover-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .course-cover .cover-label, .course-cover .cover-bookmark { z-index: 2; }
+
+  /* ─── Section sub-head ─── */
+  .sub-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin: 56px 0 18px;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .sub-head:first-of-type { margin-top: 0; }
+  .sub-head h3 {
+    font-family: var(--font-display);
+    font-size: 24px; letter-spacing: -0.02em;
+    margin: 0; font-weight: 700; color: var(--ink-900);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sub-head h3 .swatch {
+    width: 6px; height: 22px; border-radius: 3px; background: var(--pink-500);
+  }
+  .sub-head .meta-link {
+    font-size: 13.5px; font-weight: 600; color: var(--pink-700);
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .sub-head .meta-link:hover { color: var(--pink-500); }
+  .sub-head .rail-nav { display: flex; gap: 8px; }
+  .rail-btn {
+    width: 36px; height: 36px; border-radius: 99px;
+    border: 1px solid var(--ink-200); background: #fff; color: var(--ink-700);
+    display: grid; place-items: center;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .rail-btn:hover { border-color: var(--ink-900); color: var(--ink-900); }
+  .rail-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+  /* ─── Featured course banner ─── */
+  .featured {
+    background: linear-gradient(135deg, #1B0E2A 0%, #4A0028 100%);
+    color: #fff;
+    border-radius: 28px;
+    padding: 32px;
+    display: grid; grid-template-columns: 1.05fr 1.4fr; gap: 36px;
+    align-items: center;
+    position: relative; overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .featured::after {
+    content: ""; position: absolute; right: -20%; top: -50%;
+    width: 70%; aspect-ratio: 1;
+    background: radial-gradient(closest-side, rgba(229,0,122,.4), transparent 70%);
+    pointer-events: none;
+  }
+  .featured-cover {
+    border-radius: 18px; overflow: hidden;
+    aspect-ratio: 4/3;
+    background: rgba(255,255,255,.05);
+    position: relative;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6);
+  }
+  .featured-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .featured-cover .badge {
+    position: absolute; top: 14px; left: 14px;
+    background: rgba(0,0,0,.6); backdrop-filter: blur(8px);
+    color: #fff; padding: 6px 12px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .featured-cover .badge .dot { width: 7px; height: 7px; border-radius: 99px; background: #FF8FBA; box-shadow: 0 0 0 4px rgba(229,0,122,.3); }
+  .featured-body { position: relative; z-index: 1; }
+  .featured-body .eb {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--pink-200); margin-bottom: 14px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .featured-body h3 {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 3vw, 36px);
+    margin: 0 0 14px; line-height: 1.15; letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .featured-body p { color: #D9CFE0; font-size: 15.5px; margin: 0 0 22px; max-width: 540px; }
+  .featured-body .meta {
+    display: flex; gap: 22px; flex-wrap: wrap;
+    margin-bottom: 24px; font-size: 13.5px;
+  }
+  .featured-body .meta div {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .featured-body .meta div .k { font-size: 11px; color: #B6A7C0; letter-spacing: 0.06em; text-transform: uppercase; }
+  .featured-body .meta div .v { font-weight: 600; color: #fff; }
+  .featured-body .cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .featured-body .cta-row .btn-light { background: #fff; color: var(--pink-700); }
+  .featured-body .cta-row .btn-light:hover { background: var(--pink-50); }
+  .featured-body .cta-row .btn-outline-light { border: 1px solid rgba(255,255,255,.3); color: #fff; }
+  .featured-body .cta-row .btn-outline-light:hover { background: rgba(255,255,255,.08); border-color: #fff; }
+
+  /* ─── Horizontal scroll rail ─── */
+  .rail-wrap { position: relative; }
+  .rail {
+    display: flex; gap: 18px;
+    overflow-x: auto; scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    padding: 4px 4px 18px;
+    margin: 0 -4px;
+    scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail .course-card {
+    flex: 0 0 286px;
+    scroll-snap-align: start;
+  }
+
+  /* ─── Compact list cards (horizontal, image left) ─── */
+  .list-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .list-card {
+    display: grid; grid-template-columns: 140px 1fr; gap: 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color .15s, transform .15s, box-shadow .15s;
+  }
+  .list-card:hover { border-color: var(--pink-300); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .list-card .lc-cover {
+    aspect-ratio: 1; position: relative;
+    background: var(--ink-100);
+  }
+  .list-card .lc-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .list-card .lc-body { padding: 14px 16px 14px 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .list-card .lc-cat {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--pink-700);
+  }
+  .list-card .lc-title {
+    font-family: var(--font-display);
+    font-weight: 600; font-size: 15.5px; line-height: 1.3;
+    color: var(--ink-900); letter-spacing: -0.01em;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .list-card .lc-meta {
+    margin-top: auto; padding-top: 6px;
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    font-size: 12px; color: var(--ink-500);
+  }
+  .list-card .lc-meta .seats {
+    display: inline-flex; align-items: center; gap: 5px;
+    color: #047857; font-weight: 700;
+  }
+  .list-card .lc-meta .seats::before {
+    content: ""; width: 6px; height: 6px; border-radius: 99px;
+    background: #10B981; box-shadow: 0 0 0 3px #D1FAE5;
+  }
+  .list-card .lc-meta .code { font-family: ui-monospace, monospace; font-size: 11px; color: var(--ink-400); }
+
+  /* ─── Stats strip ─── */
+  .stats-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+  .stats-strip > div {
+    padding: 22px 24px;
+    border-right: 1px solid var(--ink-100);
+  }
+  .stats-strip > div:last-child { border-right: 0; }
+  .stats-strip .k { font-size: 12px; color: var(--ink-500); font-weight: 600; }
+  .stats-strip .v { font-family: var(--font-display); font-weight: 700; font-size: 26px; letter-spacing: -0.02em; color: var(--ink-900); margin-top: 4px; }
+  .stats-strip .delta { font-size: 11.5px; font-weight: 600; color: #047857; margin-top: 4px; }
+
+  /* ─── Hero tiles layout (static, no animation) ─── */
+  .hero-visual {
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+  .hero-tiles {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 14px;
+  }
+  .hero-tile {
+    background: #fff;
+    border: 1px solid var(--ink-200);
+    border-radius: 18px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 2px rgba(15,10,20,.04), 0 1px 3px rgba(15,10,20,.03);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .tile-thaid {
+    background: linear-gradient(135deg, #fff 0%, #FFF1F7 100%);
+    border-color: var(--pink-100);
+  }
+  .tile-thaid .icon {
+    width: 56px; height: 56px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px -4px rgba(0,0,0,.2);
+  }
+  .tile-thaid .icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tile-eb { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pink-700); }
+  .tile-title { font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: -0.015em; color: var(--ink-900); margin-top: 4px; line-height: 1.2; }
+  .tile-sub { font-size: 12.5px; color: var(--ink-600); margin-top: 2px; }
+
+  .tile-cert {
+    background: linear-gradient(135deg, #1E3A8A 0%, #0B1B47 100%);
+    color: #fff;
+    border-color: transparent;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .tile-cert .seal {
+    width: 38px; height: 38px;
+    border-radius: 99px;
+    background: var(--gold);
+    display: grid; place-items: center;
+    color: var(--ink-900);
+    font-weight: 800;
+    font-size: 18px;
+  }
+  .tile-cert .tile-eb { color: rgba(255,255,255,.55); }
+  .tile-cert .tile-title { color: #fff; font-size: 15.5px; }
+
+  .hero-course-list { display: flex; flex-direction: column; gap: 10px; }
+  .hero-course {
+    display: grid;
+    grid-template-columns: 84px 1fr auto;
+    gap: 14px;
+    background: #fff;
+    border: 1px solid var(--ink-200);
+    border-radius: 14px;
+    padding: 10px;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s, transform .15s, box-shadow .15s;
+  }
+  .hero-course:hover {
+    border-color: var(--pink-300);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -8px rgba(15,10,20,.12);
+  }
+  .hero-course .hc-img {
+    width: 84px; height: 84px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    background: var(--ink-100);
+  }
+  .hero-course .hc-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-course .hc-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .hero-course .hc-cat {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--pink-700);
+  }
+  .hero-course .hc-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14.5px;
+    letter-spacing: -0.01em;
+    color: var(--ink-900);
+    line-height: 1.3;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .hero-course .hc-info-meta { font-size: 11.5px; color: var(--ink-500); display: flex; gap: 10px; align-items: center; }
+  .hero-course .hc-info-meta .seats {
+    color: #047857; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .hero-course .hc-info-meta .seats::before {
+    content: ""; width: 6px; height: 6px; border-radius: 99px;
+    background: #10B981; box-shadow: 0 0 0 3px #D1FAE5;
+  }
+  .hero-course .hc-arrow {
+    width: 32px; height: 32px;
+    border-radius: 99px;
+    background: var(--ink-100);
+    display: grid; place-items: center;
+    color: var(--ink-700);
+    flex-shrink: 0;
+    transition: background .15s, color .15s;
+  }
+  .hero-course:hover .hc-arrow { background: var(--pink-500); color: #fff; }
+
+  /* ─── Instructor rail cards ─── */
+  .rail-wrap--flanked {
+    position: relative;
+    padding: 0 56px;
+  }
+  .rail-btn--side {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px; height: 44px;
+    background: #fff;
+    box-shadow: 0 6px 18px -6px rgba(15,10,20,.15);
+    z-index: 5;
+  }
+  .rail-btn--side:hover { background: var(--pink-50); border-color: var(--pink-300); color: var(--pink-700); }
+  .rail-btn--left { left: 0; }
+  .rail-btn--right { right: 0; }
+  .rail-wrap--flanked .rail { padding-left: 0; padding-right: 0; }
+  @media (max-width: 720px) {
+    .rail-wrap--flanked { padding: 0; }
+    .rail-btn--side { display: none; }
+  }
+  .instr-card {
+    flex: 0 0 250px;
+    scroll-snap-align: start;
+    background: #fff;
+    border: 1px solid var(--ink-200);
+    border-radius: 16px;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .2s, box-shadow .2s, border-color .15s;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+  }
+  .instr-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--pink-300);
+    box-shadow: 0 12px 30px -12px rgba(15,10,20,.15);
+  }
+  .instr-avatar {
+    width: 72px; height: 72px;
+    border-radius: 99px;
+    display: grid; place-items: center;
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    position: relative;
+    box-shadow: 0 8px 20px -8px rgba(15,10,20,.25);
+  }
+  .instr-check {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 22px; height: 22px;
+    border-radius: 99px;
+    background: var(--pink-500);
+    color: #fff;
+    display: grid; place-items: center;
+    border: 2.5px solid #fff;
+  }
+  .instr-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .instr-title {
+    font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--pink-700);
+  }
+  .instr-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    color: var(--ink-900);
+    line-height: 1.25;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .instr-spec {
+    font-size: 13px;
+    color: var(--ink-500);
+    line-height: 1.4;
+    margin-top: 2px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .instr-foot {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink-100);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    color: var(--ink-500);
+  }
+  .instr-foot .count strong {
+    color: var(--ink-900);
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  .instr-foot .instr-cta {
+    color: var(--pink-700);
+    font-weight: 600;
+  }
+  .instr-card:hover .instr-cta { color: var(--pink-500); }
+
+  /* ─── Logo marquee ─── */
+  .marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    padding: 4px 0;
+  }
+  .marquee-track {
+    display: flex; gap: 56px;
+    width: max-content;
+    animation: marquee-scroll 60s linear infinite;
+    will-change: transform;
+  }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+  }
+  .marquee .logo-item { flex-shrink: 0; opacity: .85; transition: opacity .15s; }
+  .marquee .logo-item:hover { opacity: 1; filter: none !important; }
+
+  /* ─── Tweak: VIBE ─── */
+  /* editorial — serif italic accents, cream tones */
+  body[data-vibe="editorial"] {
+    background: #FFFBF5;
+  }
+  body[data-vibe="editorial"] .hero {
+    background:
+      radial-gradient(900px 600px at 110% -10%, #FFE7D6 0%, transparent 55%),
+      radial-gradient(700px 500px at -10% 110%, #FFD9E9 0%, transparent 50%),
+      linear-gradient(180deg, #FFFBF5 0%, #FFF8F0 100%);
+  }
+  body[data-vibe="editorial"] .hero p.lede,
+  body[data-vibe="editorial"] .block-head .sub {
+    font-family: "ChulaCharas", "Noto Serif Thai", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 1.5;
+  }
+  body[data-vibe="editorial"] .section-pill {
+    background: transparent;
+    border: 1px solid var(--pink-300);
+    color: var(--pink-700);
+  }
+  body[data-vibe="editorial"] .block-head h2,
+  body[data-vibe="editorial"] .lms-banner h2,
+  body[data-vibe="editorial"] .personalize h2 {
+    font-family: "ChulaCharas", "Noto Serif Thai", serif;
+    font-weight: 700;
+  }
+  body[data-vibe="editorial"] .sub-head h3 {
+    font-family: "ChulaCharas", serif;
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  /* minimal — restrained, paused animations, mono tags */
+  body[data-vibe="minimal"] .marquee-track { animation-play-state: paused; }
+  body[data-vibe="minimal"] .marquee {
+    -webkit-mask-image: none; mask-image: none;
+  }
+  body[data-vibe="minimal"] .hero {
+    background: #fff;
+  }
+  body[data-vibe="minimal"] .section-pill {
+    background: transparent;
+    padding: 0;
+    color: var(--ink-500);
+    font-weight: 600;
+  }
+  body[data-vibe="minimal"] .course-tag.thai,
+  body[data-vibe="minimal"] .course-tag.cert,
+  body[data-vibe="minimal"] .course-tag.free,
+  body[data-vibe="minimal"] .course-tag.live {
+    background: var(--ink-100);
+    color: var(--ink-700);
+  }
+  body[data-vibe="minimal"] .hero-tile.tile-thaid {
+    background: #fff;
+    border-color: var(--ink-200);
+  }
+  body[data-vibe="minimal"] .course-partner .pf-mark,
+  body[data-vibe="minimal"] .partner-mark,
+  body[data-vibe="minimal"] .instr-avatar {
+    filter: grayscale(0.6);
+  }
+  body[data-vibe="minimal"] .foryou-ribbon {
+    background: var(--ink-50);
+    border-color: var(--ink-200);
+  }
+  body[data-vibe="minimal"] .featured::after,
+  body[data-vibe="minimal"] .personalize::before,
+  body[data-vibe="minimal"] .lms-banner::before { display: none; }
+
+  /* ─── Tweak: RHYTHM ─── */
+  body[data-rhythm="cozy"] section.block { padding: 44px 0; }
+  body[data-rhythm="cozy"] .course-grid { gap: 14px; }
+  body[data-rhythm="cozy"] .partner-grid { gap: 10px; }
+  body[data-rhythm="cozy"] .paths { gap: 14px; }
+  body[data-rhythm="cozy"] .hero { padding: 48px 0 40px; }
+  body[data-rhythm="cozy"] .hero-grid { gap: 44px; }
+  body[data-rhythm="cozy"] .featured { padding: 24px; }
+  body[data-rhythm="cozy"] .personalize,
+  body[data-rhythm="cozy"] .lms-banner { padding: 36px 36px; }
+  body[data-rhythm="cozy"] .sub-head { margin: 36px 0 14px; }
+
+  body[data-rhythm="airy"] section.block { padding: 104px 0; }
+  body[data-rhythm="airy"] .course-grid { gap: 32px; }
+  body[data-rhythm="airy"] .partner-grid { gap: 22px; }
+  body[data-rhythm="airy"] .paths { gap: 32px; }
+  body[data-rhythm="airy"] .hero { padding: 96px 0 80px; }
+  body[data-rhythm="airy"] .hero-grid { gap: 88px; }
+  body[data-rhythm="airy"] .featured { padding: 48px; }
+  body[data-rhythm="airy"] .personalize,
+  body[data-rhythm="airy"] .lms-banner { padding: 72px 72px; }
+  body[data-rhythm="airy"] .sub-head { margin: 80px 0 26px; }
+
+  /* Custom SVG icons in personalize quiz */
+  .pz-option { gap: 12px; }
+  .pz-option .em {
+    width: 34px; height: 34px;
+    display: grid; place-items: center;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 9px;
+    color: var(--pink-200);
+    flex-shrink: 0;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .pz-option .em svg { width: 18px; height: 18px; display: block; }
+  .pz-option:hover .em { background: rgba(255,255,255,.12); color: #fff; }
+  .pz-option.sel .em {
+    background: rgba(229,0,122,.28);
+    border-color: rgba(229,0,122,.5);
+    color: #FFC2D8;
+  }
+
+  @media (max-width: 1024px) {
+    .featured { grid-template-columns: 1fr; }
+    .list-grid { grid-template-columns: 1fr; }
+    .stats-strip { grid-template-columns: 1fr 1fr; }
+    .stats-strip > div:nth-child(2) { border-right: 0; }
+  }
+  @media (max-width: 720px) {
+    .stats-strip { grid-template-columns: 1fr; }
+    .stats-strip > div { border-right: 0; border-bottom: 1px solid var(--ink-100); }
+    .stats-strip > div:last-child { border-bottom: 0; }
+    .list-card { grid-template-columns: 110px 1fr; }
+    .list-card .lc-body { padding-right: 12px; }
+  }
+
+  /* Custom SVG icons in personalize quiz */
+  .pz-option { gap: 12px; }
+  .pz-option .em {
+    width: 34px; height: 34px;
+    display: grid; place-items: center;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 9px;
+    color: var(--pink-200);
+    flex-shrink: 0;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .pz-option .em svg { width: 18px; height: 18px; display: block; }
+  .pz-option:hover .em { background: rgba(255,255,255,.12); color: #fff; }
+  .pz-option.sel .em {
+    background: rgba(229,0,122,.28);
+    border-color: rgba(229,0,122,.5);
+    color: #FFC2D8;
+  }
+
+  .site-footer .brand {
+    display: inline-flex;
+    background: #fff;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 12px 30px -12px rgba(0,0,0,.5);
+  }
+  .site-footer .brand .brand-logo { height: 36px; }
+</style>
+</head>
+<body>
+<div class="search-backdrop"></div>
+
+<!-- ───────── HEADER ───────── -->
+<header class="site-header">
+  <div class="wrap nav">
+    <a href="#" class="brand">
+      <img src="https://d1xutesu22jhtx.cloudfront.net/paas-landing-web/lll-cu-landing/logo/lll-logo.png" alt="ChulaXL — Lifelong Learning by Chulalongkorn University" class="brand-logo" />
+    </a>
+
+    <nav class="nav-links">
+      <a href="#explore" class="nav-link has-caret">สำรวจหลักสูตร</a>
+      <a href="#paths" class="nav-link has-caret">เส้นทางอาชีพ</a>
+      <a href="#partners" class="nav-link">พันธมิตร</a>
+      <a href="#corporate" class="nav-link">สำหรับองค์กร</a>
+    </nav>
+
+    <div class="nav-search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" placeholder="ค้นหาหลักสูตร ทักษะ หรืออาจารย์ผู้สอน…" />
+        <div class="search-flyout">
+          <div class="sf-section">
+            <div class="sf-label">ฮอตใน CHULA MOOC</div>
+            <div class="sf-chips">
+              <a href="#" class="sf-chip">AI</a>
+              <a href="#" class="sf-chip">Python</a>
+              <a href="#" class="sf-chip">ภาษาอังกฤษ</a>
+              <a href="#" class="sf-chip">PDPA</a>
+              <a href="#" class="sf-chip">การลงทุน</a>
+              <a href="#" class="sf-chip">ESG</a>
+              <a href="#" class="sf-chip">Cloud Computing</a>
+              <a href="#" class="sf-chip">Design Thinking</a>
+            </div>
+          </div>
+
+          <div class="sf-section">
+            <div class="sf-label">เริ่มต้นกับคอร์สยอดนิยม</div>
+            <div class="sf-favorites">
+              <a href="course-detail.html?id=283" class="sf-fav">
+                <div class="cover">
+                  <img src="https://mooc.chula.ac.th/img/upload/ไฟฟ้าที่เราใช้มาจากไหน.png" alt="" loading="lazy" />
+                  <span class="seats-badge">4,354 ที่ว่าง</span>
+                </div>
+                <div class="body">
+                  <div class="partner">CHULA · เทคโนโลยี</div>
+                  <div class="title">ไฟฟ้าที่เราใช้มาจากไหน</div>
+                </div>
+              </a>
+              <a href="course-detail.html?id=282" class="sf-fav">
+                <div class="cover">
+                  <img src="https://mooc.chula.ac.th/img/upload/การชวน...ช่วยเลิกบุหรี่.png" alt="" loading="lazy" />
+                  <span class="seats-badge">4,485 ที่ว่าง</span>
+                </div>
+                <div class="body">
+                  <div class="partner">CHULA · สุขภาพ</div>
+                  <div class="title">การชวน...ช่วยเลิกบุหรี่</div>
+                </div>
+              </a>
+              <a href="course-detail.html?id=280" class="sf-fav">
+                <div class="cover">
+                  <img src="https://mooc.chula.ac.th/img/upload/คู่คิดคันจิไฟนอลไฟต์.png" alt="" loading="lazy" />
+                  <span class="seats-badge">3,844 ที่ว่าง</span>
+                </div>
+                <div class="body">
+                  <div class="partner">CHULA · ภาษา</div>
+                  <div class="title">คู่คิดคันจิไฟนอลไฟต์</div>
+                </div>
+              </a>
+              <a href="course-detail.html?id=281" class="sf-fav">
+                <div class="cover">
+                  <img src="https://mooc.chula.ac.th/img/upload/สารออกฤทธิ์จากสมุนไพรเพื่อสร้างสรรค์เครื่องสำอางจากธรรมชาติ.png" alt="" loading="lazy" />
+                  <span class="seats-badge">3,080 ที่ว่าง</span>
+                </div>
+                <div class="body">
+                  <div class="partner">CHULA · การจัดการ</div>
+                  <div class="title">สารออกฤทธิ์จากสมุนไพรฯ</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="sf-foot">
+            <span class="q">ไม่รู้จะเริ่มจากตรงไหน?</span>
+            <a href="onboarding.html">ทำแบบทดสอบสั้น ๆ
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+    </div>
+
+    <div class="nav-actions">
+      <div class="lang-toggle">
+        <button class="active">ไทย</button>
+        <button>EN</button>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="openLogin('login')">เข้าสู่ระบบ</button>
+      <button class="btn btn-primary btn-sm" onclick="openLogin('signup')">สมัครเรียนฟรี</button>
+    </div>
+  </div>
+</header>
+
+<!-- ───────── HERO SLIDESHOW ───────── -->
+<section class="hero hero-slideshow" id="hero-slideshow" aria-roledescription="carousel" aria-label="ChulaXL hero">
+  <div class="hero-track" id="hero-track">
+    <div class="hero-slide" data-slide="0" role="group" aria-roledescription="slide" aria-label="1 of 2">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span> ChulaXL · เปิดเรียนใหม่ Q3/2026</span>
+      <h1 style="line-height: 1.2">เรียนรู้ตลอดชีวิตและร่วมเดินทางไปกับ <span style="color: rgb(255, 0, 170);">จุฬาลงกรณ์มหาวิทยาลัย</span></h1>
+      <p class="lede">หลักสูตรออนไลน์มากกว่า 1,200 คอร์ส จาก 19 คณะและเครือข่ายพันธมิตรชั้นนำ ค้นพบเส้นทางการเรียนของคุณที่ปรับเฉพาะบุคคล พร้อมประกาศนียบัตรที่ยืนยันตัวตนด้วย ThaID</p>
+
+      <form class="hero-search" onsubmit="event.preventDefault()">
+        <input type="search" placeholder="ฉันอยากเรียน… เช่น Data Science, ภาษาจีน, การลงทุน" />
+        <button type="submit" class="btn btn-primary">ค้นหา</button>
+      </form>
+
+      <div class="hero-suggest">
+        <span>ยอดนิยม:</span>
+        <a href="#" class="chip">ปัญญาประดิษฐ์</a>
+        <a href="#" class="chip">ภาษาญี่ปุ่น</a>
+        <a href="#" class="chip">สุขภาพ</a>
+        <a href="#" class="chip">การจัดการ</a>
+        <a href="#" class="chip">อังกฤษไวยากรณ์</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">1,247</div><div class="label">หลักสูตรทั้งหมด</div></div>
+        <div class="hero-stat"><div class="num">380K+</div><div class="label">ผู้เรียนสะสม</div></div>
+        <div class="hero-stat"><div class="num">96%</div><div class="label">ความพึงพอใจ</div></div>
+        <div class="hero-stat"><div class="num">19</div><div class="label">คณะ + พันธมิตร</div></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <!-- Top: 2 tiles of different sizes -->
+      <div class="hero-tiles">
+        <div class="hero-tile tile-thaid">
+          <div class="icon">
+            <img src="https://play-lh.googleusercontent.com/jg2lAQET3kV_-6fhPQ_TcDyDItUdDcO7euuUNcANIn78_XJUmCtFBJzEdP3nG4_e2kM=w480-h960" alt="ThaID" />
+          </div>
+          <div>
+            <div class="tile-eb">ยืนยันตัวตนด้วย</div>
+            <div class="tile-title">Thai Digital ID</div>
+            <div class="tile-sub">เข้าสู่ระบบครั้งเดียว · ปลอดภัย</div>
+          </div>
+        </div>
+        <div class="hero-tile tile-cert" style="border-color: rgb(75, 59, 67); color: rgb(236, 70, 153)">
+          <div class="seal">★</div>
+          <div>
+            <div class="tile-eb">Verified</div>
+            <div class="tile-title">Chulalongkorn<br />Certificate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom: horizontal course cards -->
+      <div class="hero-course-list">
+        <a href="course-detail.html?id=285" class="hero-course">
+          <div class="hc-img"><img src="https://mooc.chula.ac.th/img/upload/ปัญญาประดิษฐ์เชิงสร้างสรรค์ (ธอส.).png" alt="" loading="lazy" /></div>
+          <div class="hc-info">
+            <div class="hc-cat">เทคโนโลยี · คอร์สใหม่</div>
+            <div class="hc-name">ปัญญาประดิษฐ์เชิงสร้างสรรค์และกระบวนการสร้างคำสั่ง</div>
+            <div class="hc-info-meta"><span>CHULA MOOC · ธอส.</span></div>
+          </div>
+          <div class="hc-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </a>
+        <a href="course-detail.html?id=283" class="hero-course">
+          <div class="hc-img"><img src="https://mooc.chula.ac.th/img/upload/ไฟฟ้าที่เราใช้มาจากไหน.png" alt="" loading="lazy" /></div>
+          <div class="hc-info">
+            <div class="hc-cat">เทคโนโลยี · เปิดรับสมัคร</div>
+            <div class="hc-name">ไฟฟ้าที่เราใช้มาจากไหน</div>
+            <div class="hc-info-meta"><span class="seats">4,354 ที่ว่าง</span></div>
+          </div>
+          <div class="hc-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </a>
+        <a href="course-detail.html?id=280" class="hero-course">
+          <div class="hc-img"><img src="https://mooc.chula.ac.th/img/upload/คู่คิดคันจิไฟนอลไฟต์.png" alt="" loading="lazy" /></div>
+          <div class="hc-info">
+            <div class="hc-cat">ภาษา · ญี่ปุ่น</div>
+            <div class="hc-name">คู่คิดคันจิไฟนอลไฟต์</div>
+            <div class="hc-info-meta"><span class="seats">3,844 ที่ว่าง</span></div>
+          </div>
+          <div class="hc-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="hero-slide hero-slide--app" data-slide="1" role="group" aria-roledescription="slide" aria-label="2 of 2">
+      <div class="wrap" style="position:relative; z-index:1; width:100%;">
+        <div class="app-banner">
+      <div class="app-content">
+        <span class="app-eyebrow"><span class="dot"></span> เร็ว ๆ นี้ · iOS & Android</span>
+        <h2>โหลด ChulaXL App<br />เรียนต่อจากเดิม ทุกที่ ทุกเวลา</h2>
+        <p class="app-lede">ดาวน์โหลดวิดีโอเรียนออฟไลน์ ทำแบบฝึกหัด ติดตามความก้าวหน้า และรับแจ้งเตือนคลาสสด — ทั้งหมดในแอปเดียว</p>
+
+        <div class="app-features">
+          <div class="app-feat">
+            <span class="ico">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+            </span>
+            <span><strong style="color:#fff">ดาวน์โหลดเรียนออฟไลน์</strong><br />ไม่มีเน็ตก็เรียนต่อได้</span>
+          </div>
+          <div class="app-feat">
+            <span class="ico">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.8-6.5"/><path d="M21 3v5h-5"/></svg>
+            </span>
+            <span><strong style="color:#fff">Sync ทุกอุปกรณ์</strong><br />ดูต่อจากเว็บได้เลย</span>
+          </div>
+          <div class="app-feat">
+            <span class="ico">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            </span>
+            <span><strong style="color:#fff">แจ้งเตือนคลาสสด</strong><br />Live class & assignment</span>
+          </div>
+          <div class="app-feat">
+            <span class="ico">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="m20 21-3-3M19 13l3-3-3-3M11 13l-3-3 3-3"/></svg>
+            </span>
+            <span><strong style="color:#fff">e-Certificate</strong><br />ดาวน์โหลดประกาศนียบัตร</span>
+          </div>
+        </div>
+
+        <div class="app-badges">
+          <a href="#" target="_blank" rel="noopener" aria-label="Download on the App Store">
+            <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/download_on_the_app_store_badge_en.svg?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="Download on the App Store" />
+          </a>
+          <a href="#" target="_blank" rel="noopener" aria-label="Get it on Google Play">
+            <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/en_generic_rgb_wo_45.png?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="Get it on Google Play" />
+          </a>
+        </div>
+
+        <div class="app-qr">
+          <div class="app-qr-code">
+            <!-- Decorative QR-like grid -->
+            <svg width="64" height="64" viewBox="0 0 64 64">
+              <rect width="64" height="64" fill="#fff"/>
+              <g fill="#0F0A14">
+                <rect x="4" y="4" width="14" height="14"/><rect x="46" y="4" width="14" height="14"/><rect x="4" y="46" width="14" height="14"/>
+                <rect x="8" y="8" width="6" height="6" fill="#fff"/><rect x="50" y="8" width="6" height="6" fill="#fff"/><rect x="8" y="50" width="6" height="6" fill="#fff"/>
+                <rect x="22" y="4" width="4" height="4"/><rect x="30" y="4" width="4" height="4"/><rect x="38" y="4" width="4" height="4"/>
+                <rect x="4" y="22" width="4" height="4"/><rect x="12" y="22" width="4" height="4"/><rect x="20" y="22" width="4" height="4"/>
+                <rect x="28" y="22" width="4" height="4"/><rect x="36" y="22" width="4" height="4"/><rect x="44" y="22" width="4" height="4"/>
+                <rect x="52" y="22" width="4" height="4"/><rect x="8" y="30" width="4" height="4"/><rect x="20" y="30" width="4" height="4"/>
+                <rect x="32" y="30" width="4" height="4"/><rect x="40" y="30" width="4" height="4"/><rect x="52" y="30" width="4" height="4"/>
+                <rect x="4" y="38" width="4" height="4"/><rect x="12" y="38" width="4" height="4"/><rect x="24" y="38" width="4" height="4"/>
+                <rect x="36" y="38" width="4" height="4"/><rect x="44" y="38" width="4" height="4"/><rect x="56" y="38" width="4" height="4"/>
+                <rect x="22" y="46" width="4" height="4"/><rect x="30" y="46" width="4" height="4"/><rect x="40" y="46" width="4" height="4"/>
+                <rect x="50" y="46" width="4" height="4"/><rect x="26" y="54" width="4" height="4"/><rect x="34" y="54" width="4" height="4"/>
+                <rect x="44" y="54" width="4" height="4"/><rect x="52" y="54" width="4" height="4"/>
+              </g>
+            </svg>
+          </div>
+          <div class="app-qr-text">
+            <strong>สแกน QR เพื่อดาวน์โหลด</strong><br />
+            หรือส่งลิงก์ดาวน์โหลดทาง SMS ที่หน้าเข้าสู่ระบบ
+          </div>
+        </div>
+      </div>
+
+      <div class="app-phone">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-statusbar">
+              <span>9:41</span>
+              <span>●●● ▮</span>
+            </div>
+            <div class="phone-greeting">สวัสดี</div>
+            <div class="phone-name">คุณหนึ่ง</div>
+
+            <div class="phone-progress-card" style="display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:center;">
+              <div style="width:44px; height:44px; border-radius:8px; overflow:hidden; background:rgba(255,255,255,.2);">
+                <img src="https://mooc.chula.ac.th/img/upload/ปัญญาประดิษฐ์เชิงสร้างสรรค์ (ธอส.).png" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+              </div>
+              <div>
+                <div class="lbl">เรียนต่อจากเดิม</div>
+                <div class="ct">ปัญญาประดิษฐ์เชิงสร้างสรรค์และ Prompt</div>
+              </div>
+              <div style="grid-column:1/-1;">
+                <div class="bar"><span></span></div>
+                <div class="pct">64% · เหลือ 2 ชม. 18 นาที</div>
+              </div>
+            </div>
+
+            <div class="phone-section-label">แนะนำสำหรับคุณ</div>
+            <div class="phone-course-item">
+              <div class="ic" style="background:linear-gradient(135deg,#0EA5E9,#1E3A8A); overflow:hidden;"><img src="https://mooc.chula.ac.th/img/upload/ไฟฟ้าที่เราใช้มาจากไหน.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" /></div>
+              <div>
+                <div class="t">ไฟฟ้าที่เราใช้มาจากไหน</div>
+                <div class="m">CHULA · เทคโนโลยี · 4,354 ที่ว่าง</div>
+              </div>
+            </div>
+            <div class="phone-course-item">
+              <div class="ic" style="background:linear-gradient(135deg,#DC2626,#F59E0B); overflow:hidden;"><img src="https://mooc.chula.ac.th/img/upload/คู่คิดคันจิไฟนอลไฟต์.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" /></div>
+              <div>
+                <div class="t">คู่คิดคันจิไฟนอลไฟต์</div>
+                <div class="m">CHULA · ภาษา · 3,844 ที่ว่าง</div>
+              </div>
+            </div>
+
+            <div class="phone-tabbar">
+              <span class="phone-tab active">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              </span>
+              <span class="phone-tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              </span>
+              <span class="phone-tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v9M2 14h20M5 17h14a2 2 0 0 0 2-2H3a2 2 0 0 0 2 2z"/></svg>
+              </span>
+              <span class="phone-tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-dots" role="tablist" aria-label="เลือกสไลด์">
+    <button class="hero-dot active" data-go="0" role="tab" aria-selected="true" aria-label="สไลด์ 1: เรียนรู้ตลอดชีวิต"></button>
+    <button class="hero-dot" data-go="1" role="tab" aria-selected="false" aria-label="สไลด์ 2: ดาวน์โหลด ChulaXL App"></button>
+  </div>
+</section>
+
+<!-- ───────── LOGO STRIP ───────── -->
+<section class="logos">
+  <div class="wrap">
+    <div class="logos-head">ร่วมมือกับคณะของจุฬาฯ และหน่วยงานชั้นนำ</div>
+  </div>
+  <div class="marquee" aria-label="พันธมิตรผู้ผลิตเนื้อหา">
+    <div class="marquee-track">
+      <div class="logo-item"><span class="glyph" style="background:#7A0040;">ENG</span> คณะวิศวกรรมศาสตร์</div>
+      <div class="logo-item"><span class="glyph" style="background:#C2410C;">ART</span> คณะอักษรศาสตร์</div>
+      <div class="logo-item"><span class="glyph" style="background:#1E3A8A;">CBS</span> คณะพาณิชยศาสตร์ฯ</div>
+      <div class="logo-item"><span class="glyph" style="background:#047857;">MED</span> คณะแพทยศาสตร์</div>
+      <div class="logo-item"><span class="glyph" style="background:#6D28D9;">PHA</span> คณะเภสัชศาสตร์</div>
+      <div class="logo-item"><span class="glyph" style="background:#B91C1C;">LAW</span> คณะนิติศาสตร์</div>
+      <div class="logo-item"><span class="glyph" style="background:#0369A1;">POL</span> คณะรัฐศาสตร์</div>
+      <div class="logo-item"><span class="glyph" style="background:#0F766E;">EDU</span> คณะครุศาสตร์</div>
+      <div class="logo-item"><span class="glyph" style="background:#0B3D2E;font-size:9px;">กลาโหม</span> กระทรวงกลาโหม</div>
+      <div class="logo-item"><span class="glyph" style="background:#B71C2C;font-size:11px;">ธอส.</span> ธนาคารอาคารสงเคราะห์</div>
+      <div class="logo-item"><span class="glyph" style="background:#5B21B6;">วธ.</span> กระทรวงวัฒนธรรม</div>
+      <div class="logo-item"><span class="glyph" style="background:#9E0056;font-size:9.5px;">Chula XL</span> วิทยาลัยส่งเสริมการเรียนรู้ตลอดชีวิตฯ</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#7A0040;">ENG</span> คณะวิศวกรรมศาสตร์</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#C2410C;">ART</span> คณะอักษรศาสตร์</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#1E3A8A;">CBS</span> คณะพาณิชยศาสตร์ฯ</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#047857;">MED</span> คณะแพทยศาสตร์</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#6D28D9;">PHA</span> คณะเภสัชศาสตร์</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#B91C1C;">LAW</span> คณะนิติศาสตร์</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#0369A1;">POL</span> คณะรัฐศาสตร์</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#0F766E;">EDU</span> คณะครุศาสตร์</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#0B3D2E;font-size:9px;">กลาโหม</span> กระทรวงกลาโหม</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#B71C2C;font-size:11px;">ธอส.</span> ธนาคารอาคารสงเคราะห์</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#5B21B6;">วธ.</span> กระทรวงวัฒนธรรม</div>
+      <div class="logo-item" aria-hidden="true"><span class="glyph" style="background:#9E0056;font-size:9.5px;">Chula XL</span> วิทยาลัยส่งเสริมการเรียนรู้ตลอดชีวิตฯ</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── PERSONALIZED + COURSE EXPLORE ───────── -->
+<section class="block" id="explore">
+  <div class="wrap">
+
+    <div class="foryou-ribbon">
+      <div class="avatar">ก</div>
+      <div class="text"><strong>สวัสดีคุณหนึ่ง</strong> · เราคัดหลักสูตรจาก CHULA MOOC ตาม<strong>ความสนใจ: AI & Productivity</strong> และประวัติการเรียนของคุณ</div>
+      <button class="btn btn-outline btn-sm">ปรับความสนใจ</button>
+    </div>
+
+    <div class="block-head">
+      <div>
+        <span class="section-pill">Explore · For you</span>
+        <h2>คอร์สเรียนจาก CHULA MOOC</h2>
+        <p class="sub">เรียงตามทักษะที่ตลาดต้องการในสายงานของคุณ ผสมกับความสนใจที่คุณเลือกตอนสมัคร · ดึงข้อมูลจริงจาก chulaxl.chula.ac.th</p>
+      </div>
+      <div class="head-right">
+        <div class="cat-tabs">
+          <button class="cat-tab active">แนะนำ <span class="count">24</span></button>
+          <button class="cat-tab">ต่อจากเดิม <span class="count">3</span></button>
+          <button class="cat-tab">บันทึกไว้ <span class="count">12</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category filter row (real categories from CHULA MOOC) -->
+    <div class="cat-tabs" style="margin-bottom: 28px;">
+      <button class="cat-tab active">คอร์สทั้งหมด</button>
+      <button class="cat-tab">เทคโนโลยี</button>
+      <button class="cat-tab">ภาษา</button>
+      <button class="cat-tab">การจัดการ</button>
+      <button class="cat-tab">ศิลปะและการพัฒนาตนเอง</button>
+      <button class="cat-tab">สุขภาพ</button>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="stats-strip">
+      <div>
+        <div class="k">คอร์สทั้งหมด</div>
+        <div class="v">280+</div>
+        <div class="delta">↑ 8 คอร์สใหม่เดือนนี้</div>
+      </div>
+      <div>
+        <div class="k">หมวดวิชาหลัก</div>
+        <div class="v">5 หมวด</div>
+        <div class="delta">ภาษา · เทคโนโลยี · การจัดการ · ศิลปะ · สุขภาพ</div>
+      </div>
+      <div>
+        <div class="k">ค่าใช้จ่าย</div>
+        <div class="v">ฟรีทั้งหมด</div>
+        <div class="delta">รวมประกาศนียบัตรอิเล็กทรอนิกส์</div>
+      </div>
+      <div>
+        <div class="k">ที่ว่างเปิดรับ</div>
+        <div class="v">15,763</div>
+        <div class="delta">↑ พร้อมเริ่มเรียนทันที</div>
+      </div>
+    </div>
+
+    <!-- ─── 1. FEATURED COURSE BANNER ─── -->
+    <div class="sub-head">
+      <h3><span class="swatch"></span> คอร์สเด่นประจำสัปดาห์</h3>
+      <a href="https://mooc.chula.ac.th/course-all" target="_blank" rel="noopener" class="meta-link">ดูคอร์สใหม่ทั้งหมด →</a>
+    </div>
+
+    <a href="course-detail.html?id=285" class="featured" style="text-decoration:none; display:grid;">
+      <div class="featured-cover">
+        <img src="https://mooc.chula.ac.th/img/upload/ปัญญาประดิษฐ์เชิงสร้างสรรค์ (ธอส.).png" alt="" loading="lazy" />
+        <span class="badge"><span class="dot"></span> คอร์สใหม่</span>
+      </div>
+      <div class="featured-body">
+        <div class="eb">CHULA MOOC × ธนาคารอาคารสงเคราะห์ · CHULAMOOC2654</div>
+        <h3>ปัญญาประดิษฐ์เชิงสร้างสรรค์ และกระบวนการสร้างคำสั่ง (Prompt)</h3>
+        <p>เรียนรู้พื้นฐาน Generative AI ตั้งแต่หลักการทำงานของโมเดลภาษา, การเขียน Prompt ที่ดี, จนถึงการประยุกต์ใช้กับงานจริงในองค์กร พร้อมตัวอย่างกรณีศึกษาจากภาคการเงินและบริการ</p>
+        <div class="meta">
+          <div><span class="k">หมวด</span><span class="v">เทคโนโลยี</span></div>
+          <div><span class="k">รูปแบบ</span><span class="v">เรียนเองได้</span></div>
+          <div><span class="k">ประกาศนียบัตร</span><span class="v">e-Certificate</span></div>
+          <div><span class="k">ค่าเรียน</span><span class="v">ฟรี</span></div>
+        </div>
+        <div class="cta-row">
+          <span class="btn btn-light">ลงทะเบียนเรียน →</span>
+          <span class="btn btn-outline-light">ดูเนื้อหาคอร์ส</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- ─── 2. HORIZONTAL RAIL: เทคโนโลยี & AI ─── -->
+    <div class="sub-head">
+      <h3><span class="swatch" style="background:#5B21B6"></span> เทคโนโลยี &amp; AI</h3>
+      <div style="display:flex; gap:18px; align-items:center;">
+        <a href="https://mooc.chula.ac.th/course/2" target="_blank" rel="noopener" class="meta-link">ดูทั้งหมด →</a>
+        <div class="rail-nav">
+          <button class="rail-btn" data-rail="tech" data-dir="-1" aria-label="เลื่อนซ้าย">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button class="rail-btn" data-rail="tech" data-dir="1" aria-label="เลื่อนขวา">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="rail-wrap">
+      <div class="rail" id="rail-tech"></div>
+    </div>
+
+    <!-- ─── 3. HORIZONTAL RAIL: ภาษา ─── -->
+    <div class="sub-head">
+      <h3><span class="swatch" style="background:#0EA5E9"></span> ภาษา</h3>
+      <div style="display:flex; gap:18px; align-items:center;">
+        <a href="https://mooc.chula.ac.th/course/1" target="_blank" rel="noopener" class="meta-link">ดูทั้งหมด →</a>
+        <div class="rail-nav">
+          <button class="rail-btn" data-rail="lang" data-dir="-1" aria-label="เลื่อนซ้าย">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button class="rail-btn" data-rail="lang" data-dir="1" aria-label="เลื่อนขวา">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="rail-wrap">
+      <div class="rail" id="rail-lang"></div>
+    </div>
+
+    <!-- ─── 4. COMPACT LIST: คอร์สเปิดรับสมัคร ─── -->
+    <div class="sub-head">
+      <h3><span class="swatch" style="background:#10B981"></span> คอร์สที่กำลังเปิดรับสมัคร</h3>
+      <a href="#" class="meta-link">ดูทั้งหมด →</a>
+    </div>
+    <div class="list-grid" id="list-open"></div>
+
+    <!-- ─── 5. VERTICAL GRID: ทั้งหมด ─── -->
+    <div class="sub-head">
+      <h3><span class="swatch" style="background:#7C2D12"></span> สำรวจหมวด ศิลปะและการพัฒนาตนเอง · การจัดการ · สุขภาพ</h3>
+      <a href="https://mooc.chula.ac.th/course-all" target="_blank" rel="noopener" class="meta-link">เรียงตาม: ล่าสุด →</a>
+    </div>
+    <div class="course-grid" id="grid-all"></div>
+
+    <div style="text-align:center; margin-top:48px;">
+      <a href="https://mooc.chula.ac.th/course-all" target="_blank" rel="noopener" class="btn btn-outline btn-lg">ดูคอร์สทั้งหมด 280+ บน CHULA MOOC →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Course data + renderer -->
+<script>
+  // All courses scraped from chulaxl.chula.ac.th / mooc.chula.ac.th (page 1+2)
+  const COURSES = [
+    { id: 285, code: 'CHULAMOOC2654', title: 'ปัญญาประดิษฐ์เชิงสร้างสรรค์และกระบวนการสร้างคำสั่ง (ธอส.)', cat: 'เทคโนโลยี', img: 'ปัญญาประดิษฐ์เชิงสร้างสรรค์ (ธอส.).png', seats: null, partner: 'ธอส.', tags: ['ใหม่','AI','Partner'] },
+    { id: 284, code: 'CHULAMOOC2658', title: 'ปัญญาประดิษฐ์เพื่อการพัฒนาตนเองและการเรียนรู้ตลอดชีวิต', cat: 'เทคโนโลยี', img: 'ปัญญาประดิษฐ์เพื่อการพัฒนาตนเองฯ.png', seats: null, tags: ['ใหม่','AI'] },
+    { id: 283, code: 'CHULAMOOC2012', title: 'ไฟฟ้าที่เราใช้มาจากไหน', cat: 'เทคโนโลยี', img: 'ไฟฟ้าที่เราใช้มาจากไหน.png', seats: 4354, tags: ['เปิดรับสมัคร'] },
+    { id: 282, code: 'CHULAMOOC5047', title: 'การชวน...ช่วยเลิกบุหรี่', cat: 'สุขภาพ', img: 'การชวน...ช่วยเลิกบุหรี่.png', seats: 4485, tags: ['เปิดรับสมัคร'] },
+    { id: 281, code: 'CHULAMOOC3026', title: 'สารออกฤทธิ์จากสมุนไพรเพื่อสร้างสรรค์เครื่องสำอางจากธรรมชาติ', cat: 'การจัดการ', img: 'สารออกฤทธิ์จากสมุนไพรเพื่อสร้างสรรค์เครื่องสำอางจากธรรมชาติ.png', seats: 3080, tags: ['เปิดรับสมัคร'] },
+    { id: 280, code: 'CHULAMOOC1314', title: 'คู่คิดคันจิไฟนอลไฟต์', cat: 'ภาษา', img: 'คู่คิดคันจิไฟนอลไฟต์.png', seats: 3844, lang: 'ญี่ปุ่น', tags: ['เปิดรับสมัคร'] },
+    { id: 279, code: 'CHULAMOOC4010', title: 'ประกันสังคมนั้นสำคัญไฉน (กลาโหม)', cat: 'ศิลปะและการพัฒนาตนเอง', img: 'ปก สังคม กลาโหม.png', seats: null, partner: 'กลาโหม' },
+    { id: 278, code: 'CHULAMOOC1611', title: 'มหากาพย์ อังกฤษ อัปเกรด: ตั้งไข่ไวยากรณ์ (กลาโหม)', cat: 'ภาษา', img: 'ตั้งไข่ กลาโหม.png', seats: null, lang: 'อังกฤษ', partner: 'กลาโหม' },
+    { id: 277, code: 'CHULAMOOC4011', title: 'การพัฒนาทักษะชีวิต (กลาโหม)', cat: 'ศิลปะและการพัฒนาตนเอง', img: 'พัฒนาทักษะชีวิต กลาโหม.png', seats: null, partner: 'กลาโหม' },
+    { id: 276, code: 'CHULAMOOC4658', title: 'เปิดโลกสังคมศาสตร์ : หน้าที่พลเมืองและกฎหมาย (กลาโหม)', cat: 'ศิลปะและการพัฒนาตนเอง', img: 'หน้าที่พลเมือง กลาโหม (1)_0.png', seats: null, partner: 'กลาโหม' },
+    { id: 275, code: 'CHULAMOOC3014', title: 'เศรษฐกิจเกษตร (กลาโหม)', cat: 'การจัดการ', img: '15 กลาโหม.png', seats: null, partner: 'กลาโหม' },
+    { id: 274, code: 'CHULAMOOC4631', title: 'หลักการพื้นฐานทางกฎหมายทั่วไป (กลาโหม)', cat: 'ศิลปะและการพัฒนาตนเอง', img: '14 กลาโหม.png', seats: null, partner: 'กลาโหม' },
+    { id: 273, code: 'CHULAMOOC2024', title: 'สร้างสรรค์ไม่รู้จบกับ Canva ศิลปะการใช้ AI ในการออกแบบสื่อประชาสัมพันธ์ (กลาโหม)', cat: 'เทคโนโลยี', img: '13 กลาโหม.png', seats: null, partner: 'กลาโหม', tags: ['AI'] },
+    { id: 272, code: 'NEURON0128', title: 'อยู่กับเอไอ อะไรต้องรู้ต้องเข้าใจ (กลาโหม)', cat: 'เทคโนโลยี', img: '12 กลาโหม.png', seats: null, partner: 'กลาโหม', tags: ['AI'] },
+    { id: 271, code: 'CHULAMOOC3013', title: 'คณิตศาสตร์การเงินในชีวิตประจำวัน (กลาโหม)', cat: 'การจัดการ', img: '11 กลาโหม.png', seats: null, partner: 'กลาโหม' },
+    { id: 270, code: 'CHULAMOOC1614', title: 'มหากาพย์ อังกฤษ อัปเกรด: ศัพท์ทะลุ อ่านทะลวง (กลาโหม)', cat: 'ภาษา', img: 'ศัพท์ทะลุ กลาโหม.png', seats: null, lang: 'อังกฤษ', partner: 'กลาโหม' },
+    { id: 269, code: 'CHULAMOOC2029', title: 'การใช้เครื่องมือ AI ใน Canva เพื่อเพิ่มประสิทธิภาพการทำงานและการออกแบบ (กลาโหม)', cat: 'เทคโนโลยี', img: '10 กลาโหม.png', seats: null, partner: 'กลาโหม', tags: ['AI'] },
+    { id: 268, code: 'CHULAMOOC1615', title: 'มหากาพย์ อังกฤษ อัปเกรด: Conversation มั่นใจ (กลาโหม)', cat: 'ภาษา', img: '9 กลาโหม.png', seats: null, lang: 'อังกฤษ', partner: 'กลาโหม' },
+    { id: 267, code: 'CHULAMOOC4029', title: 'การเขียนรายงานสรุปข้อมูล (กลาโหม)', cat: 'ศิลปะและการพัฒนาตนเอง', img: 'การเขียนรายงาน กลาโหม_0.png', seats: null, partner: 'กลาโหม' },
+    { id: 266, code: 'CHULAMOOC2611', title: 'กฎหมายคุ้มครองข้อมูลส่วนบุคคลสำหรับผู้ปฏิบัติงานในหน่วยงานและองค์กรธุรกิจ (กลาโหม)', cat: 'ศิลปะและการพัฒนาตนเอง', img: '7 กลาโหม.png', seats: null, partner: 'กลาโหม' },
+    { id: 265, code: 'MCULTURE.001', title: 'หลักสูตรส่งเสริมการรู้เท่าทันสื่อ สารสนเทศ และดิจิทัล (กลาโหม)', cat: 'ศิลปะและการพัฒนาตนเอง', img: '6 กลาโหม.png', seats: null, partner: 'กลาโหม' },
+    { id: 264, code: 'CHULAMOOC2653', title: 'Chula AI-10 กรอบสมรรถนะด้านเอไอสำหรับทุกคน (กลาโหม)', cat: 'เทคโนโลยี', img: '5 กลาโหม.png', seats: null, partner: 'กลาโหม', tags: ['AI'] },
+    { id: 263, code: 'CHULAMOOC3016', title: 'การสื่อสารในภาวะวิกฤต (กลาโหม)', cat: 'การจัดการ', img: '4 กลาโหม.png', seats: null, partner: 'กลาโหม' },
+    { id: 262, code: 'CHULAMOOC3023', title: 'Strategic Communication Plan (Ministry of Defence)', cat: 'การจัดการ', img: 'strategic commกลาโหม.png', seats: null, partner: 'กลาโหม' }
+  ];
+
+  // Category gradient covers (fallback when image is missing)
+  const CAT_GRAD = {
+    'เทคโนโลยี': 'linear-gradient(135deg,#1E3A8A 0%,#5B21B6 100%)',
+    'ภาษา': 'linear-gradient(135deg,#0EA5E9 0%,#1E3A8A 100%)',
+    'การจัดการ': 'linear-gradient(135deg,#0F766E 0%,#06B6D4 100%)',
+    'ศิลปะและการพัฒนาตนเอง': 'linear-gradient(135deg,#7C2D12 0%,#EAB308 100%)',
+    'สุขภาพ': 'linear-gradient(135deg,#DC2626 0%,#F59E0B 100%)'
+  };
+
+  function imgUrl(filename) {
+    return 'https://mooc.chula.ac.th/img/upload/' + encodeURIComponent(filename);
+  }
+  function courseUrl(id) {
+    return 'course-detail.html?id=' + id;
+  }
+
+  // Render a vertical course card
+  function cardHtml(c, opts = {}) {
+    const grad = CAT_GRAD[c.cat] || CAT_GRAD['เทคโนโลยี'];
+    const label = c.tags?.[0] || (c.seats ? 'เปิดรับสมัคร' : '');
+    const labelHtml = label && !opts.compact ? `<span class="cover-label">${label}</span>` : '';
+    const partnerInitial = (c.partner || 'C').slice(0, 1);
+    const partnerLabel = c.partner ? `CHULA MOOC × ${c.partner}` : 'CHULA MOOC';
+    const seatsHtml = c.seats
+      ? `<span><strong style="color:var(--ink-900)">${c.seats.toLocaleString()}</strong> ที่ว่าง</span>`
+      : `<span>เรียนเองได้</span>`;
+    const langHtml = c.lang ? `<span class="dot-sep"></span><span>${c.lang}</span>` : '';
+    return `
+      <a href="${courseUrl(c.id)}" target="_blank" rel="noopener" class="course-card">
+        <div class="course-cover" style="background:${grad}">
+          <img class="cover-img" src="${imgUrl(c.img)}" alt="" loading="lazy" />
+          ${labelHtml}
+          <button class="cover-bookmark" onclick="event.preventDefault(); this.classList.toggle('active')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h12v17l-6-3.5L6 21z"/></svg>
+          </button>
+        </div>
+        <div class="course-body">
+          <div class="course-partner"><span class="pf-mark">${partnerInitial}</span> ${partnerLabel} · ${c.code}</div>
+          <div class="course-title">${c.title}</div>
+          <div class="course-meta">
+            <span>${c.cat}</span>
+            <span class="dot-sep"></span>
+            ${seatsHtml}
+            ${langHtml}
+          </div>
+          <div class="course-tags">
+            <span class="course-tag thai">ภาษาไทย</span>
+            <span class="course-tag free">ฟรี</span>
+            ${c.tags?.includes('AI') ? '<span class="course-tag">AI</span>' : ''}
+            ${c.partner ? '<span class="course-tag">พันธมิตร</span>' : ''}
+          </div>
+          <div class="course-foot">
+            <div class="course-price free">ฟรี</div>
+            <span class="course-cta-mini">ลงทะเบียน →</span>
+          </div>
+        </div>
+      </a>
+    `;
+  }
+
+  // Render a compact horizontal list card
+  function listCardHtml(c) {
+    const seatsHtml = c.seats
+      ? `<span class="seats">${c.seats.toLocaleString()} ที่ว่าง</span>`
+      : '<span>เรียนเองได้</span>';
+    return `
+      <a href="${courseUrl(c.id)}" target="_blank" rel="noopener" class="list-card">
+        <div class="lc-cover">
+          <img src="${imgUrl(c.img)}" alt="" loading="lazy" />
+        </div>
+        <div class="lc-body">
+          <div class="lc-cat">${c.cat}</div>
+          <div class="lc-title">${c.title}</div>
+          <div class="lc-meta">
+            ${seatsHtml}
+            <span class="code">${c.code}</span>
+          </div>
+        </div>
+      </a>
+    `;
+  }
+
+  // Populate sections
+  const techCourses = COURSES.filter(c => c.cat === 'เทคโนโลยี');
+  const langCourses = COURSES.filter(c => c.cat === 'ภาษา');
+  const openCourses = COURSES.filter(c => c.seats !== null);
+  // "Others" = management, arts-self-development, health
+  const otherCourses = COURSES.filter(c => ['การจัดการ','ศิลปะและการพัฒนาตนเอง','สุขภาพ'].includes(c.cat));
+
+  document.getElementById('rail-tech').innerHTML = techCourses.map(c => cardHtml(c)).join('');
+  document.getElementById('rail-lang').innerHTML = langCourses.map(c => cardHtml(c)).join('');
+  document.getElementById('list-open').innerHTML = openCourses.map(c => listCardHtml(c)).join('');
+  document.getElementById('grid-all').innerHTML = otherCourses.slice(0, 8).map(c => cardHtml(c)).join('');
+
+  // Rail nav buttons
+  document.querySelectorAll('.rail-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const rail = document.getElementById('rail-' + btn.dataset.rail);
+      const dir = parseInt(btn.dataset.dir, 10);
+      rail.scrollBy({ left: dir * (rail.clientWidth * 0.8), behavior: 'smooth' });
+    });
+  });
+</script>
+
+<!-- ───────── PERSONALIZE BAND ───────── -->
+<section class="block" style="padding-top:0;">
+  <div class="wrap">
+    <div class="personalize">
+      <div style="position:relative; z-index:1;">
+        <span class="pz-pill">ปรับเฉพาะคุณ · 3 นาที</span>
+        <h2>ระบบจะเรียงหลักสูตรให้คุณ<br />จากเป้าหมายและเวลาที่มี</h2>
+        <p>ตอบคำถามสั้นๆ 5 ข้อ ระบบจะวิเคราะห์ความสนใจ ระดับทักษะ และเวลาที่มี เพื่อแนะนำเส้นทางการเรียนที่เหมาะสมที่สุด พร้อมประเมินทักษะใหม่ทุก 30 วัน</p>
+        <div class="pz-steps">
+          <div class="pz-step"><div class="n">1</div><div class="lbl">เลือกความสนใจ</div></div>
+          <div class="pz-step"><div class="n">2</div><div class="lbl">ระดับทักษะ</div></div>
+          <div class="pz-step"><div class="n">3</div><div class="lbl">เป้าหมาย & เวลา</div></div>
+        </div>
+      </div>
+
+      <div class="pz-quiz">
+        <div class="pz-quiz-head">
+          <span class="q">คำถามที่ 2 / 5</span>
+          <span class="step">ประมาณ 45 วินาที</span>
+        </div>
+        <h3 class="pz-quiz-title">เป้าหมายในการเรียนของคุณคืออะไร?</h3>
+        <div class="pz-options">
+          <button class="pz-option sel">
+            <span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h13l-3-3M21 17H8l3 3"/><circle cx="19" cy="7" r="1.4" fill="currentColor" stroke="none"/><circle cx="5" cy="17" r="1.4" fill="currentColor" stroke="none"/></svg></span>
+            เปลี่ยนสายงาน
+          </button>
+          <button class="pz-option">
+            <span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="15" width="4" height="5.5" rx="1"/><rect x="10" y="10" width="4" height="10.5" rx="1"/><rect x="16.5" y="5" width="4" height="15.5" rx="1"/><path d="M3 5l5-2 5 1 5-3"/></svg></span>
+            เลื่อนตำแหน่ง
+          </button>
+          <button class="pz-option">
+            <span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6.5" rx="7" ry="2.2"/><path d="M5 6.5v4c0 1.2 3.1 2.2 7 2.2s7-1 7-2.2v-4"/><path d="M5 12.5v4c0 1.2 3.1 2.2 7 2.2s7-1 7-2.2v-4"/></svg></span>
+            เก็บหน่วยกิต
+          </button>
+          <button class="pz-option">
+            <span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+            เรียนเพื่อตัวเอง
+          </button>
+          <button class="pz-option">
+            <span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19l7-7"/><path d="M14 10l5-5M14.5 5H19v4.5"/><path d="M8 16l-3 1 1-3"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+            เริ่มทำธุรกิจ
+          </button>
+          <button class="pz-option">
+            <span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.8-6.5"/><path d="M21 3v5h-5"/><path d="M8 13l3-3 2 2 3.5-3.5"/></svg></span>
+            Reskill / Upskill
+          </button>
+        </div>
+        <div class="pz-quiz-foot">
+          <div class="pz-progress">
+            <span class="on"></span><span class="on"></span><span></span><span></span><span></span>
+          </div>
+          <button class="btn btn-primary btn-sm">ถัดไป →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── INSTRUCTORS ───────── -->
+<section class="block" id="instructors" style="padding-top:0;">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <span class="section-pill">Instructors</span>
+        <h2>เรียนกับอาจารย์ผู้เชี่ยวชาญจากจุฬาฯ</h2>
+        <p class="sub">อาจารย์ผู้สอนกว่า 50 ท่านจากคณะต่างๆ ของจุฬาฯ และเครือข่ายพันธมิตร · ดึงข้อมูลจริงจาก CU Neuron</p>
+      </div>
+      <div class="head-right">
+        <a href="https://cuneuron.chula.ac.th/course-online" target="_blank" rel="noopener" class="meta-link">ดูทั้งหมด →</a>
+      </div>
+    </div>
+
+    <div class="rail-wrap rail-wrap--flanked">
+      <button class="rail-btn rail-btn--side rail-btn--left" data-rail="instructors" data-dir="-1" aria-label="เลื่อนซ้าย">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div class="rail" id="rail-instructors"></div>
+      <button class="rail-btn rail-btn--side rail-btn--right" data-rail="instructors" data-dir="1" aria-label="เลื่อนขวา">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Instructor data + renderer -->
+<script>
+  const INSTRUCTORS = [
+    { name: 'รศ.ดร.อติวงศ์ สุชาโต', initials: 'อต', grad: 'linear-gradient(135deg,#5B21B6,#1E3A8A)',
+      title: 'CHULA · ENGINEERING', spec: 'การรู้เท่าทันดิจิทัล ข้อมูล และปัญญาประดิษฐ์',
+      courses: 3, url: 'https://cuneuron.chula.ac.th/mooc-maincourse-detail/8' },
+    { name: 'ผศ.ดร.นฤมล ประทานวณิช', initials: 'นป', grad: 'linear-gradient(135deg,#6D28D9,#EC4899)',
+      title: 'CHULA · COMPUTER SCI.', spec: 'การใช้งานเอไอด้วยสมรรถนะรอบด้าน · AI Literacy',
+      courses: 2, url: 'https://cuneuron.chula.ac.th/course-detail/298' },
+    { name: 'ผศ.ดร.ฑิตยา หวานวารี', initials: 'ฑห', grad: 'linear-gradient(135deg,#0EA5E9,#1E3A8A)',
+      title: 'CHULA · COMPUTER SCI.', spec: 'การเรียนรู้ของเครื่อง · Cloud Computing for Everyone',
+      courses: 4, url: 'https://cuneuron.chula.ac.th/mooc-maincourse-detail/4' },
+    { name: 'ศ.ดร.วิวัฒน์ วัฒนาวุฒิ', initials: 'วว', grad: 'linear-gradient(135deg,#0F766E,#06B6D4)',
+      title: 'CHULA · SOFTWARE ENG.', spec: 'การบริหารโครงการพัฒนาแอปพลิเคชันยุคใหม่ · Low-code/No-code',
+      courses: 5, url: 'https://cuneuron.chula.ac.th/mooc-maincourse-detail/2' },
+    { name: 'รศ.ดร.ปิยะบุตร บุญอร่ามเรือง', initials: 'ปบ', grad: 'linear-gradient(135deg,#B91C1C,#7A0040)',
+      title: 'CHULA · LAW', spec: 'การคุ้มครองข้อมูลส่วนบุคคล · PDPA',
+      courses: 2, url: 'https://cuneuron.chula.ac.th/mooc-maincourse-detail/1' },
+    { name: 'ผศ.ดร.อรรถพล ธำรงรัตนฤทธิ์', initials: 'อธ', grad: 'linear-gradient(135deg,#6D28D9,#EC4899)',
+      title: 'CHULA · ARTS', spec: 'Introduction to Data Analytics · NLP',
+      courses: 3, url: 'https://cuneuron.chula.ac.th/course-detail/162' },
+    { name: 'ผศ.ดร.สุกรี สินธุภิญโญ', initials: 'สส', grad: 'linear-gradient(135deg,#5B21B6,#1E3A8A)',
+      title: 'CHULA · COMPUTER SCI.', spec: 'การวิเคราะห์ข้อมูลด้วยภาษาไพทอน',
+      courses: 2, url: 'https://cuneuron.chula.ac.th/mooc-maincourse-detail/5' },
+    { name: 'คุณธนพร เจียรนัยกุลวานิช', initials: 'ธจ', grad: 'linear-gradient(135deg,#047857,#84CC16)',
+      title: 'PARTNER · FINANCE', spec: 'เทรดหุ้นแบบไม่เฝ้าจอ · การลงทุนสำหรับคนทำงาน',
+      courses: 2, url: 'https://cuneuron.chula.ac.th/course-detail/176' },
+    { name: 'คุณกุลนันท์ พันธุ์อนุกูล', initials: 'กพ', grad: 'linear-gradient(135deg,#0F766E,#06B6D4)',
+      title: 'PARTNER · DESIGN', spec: 'Design Thinking for Digital Solutions',
+      courses: 1, url: 'https://cuneuron.chula.ac.th/course-detail/182' },
+    { name: 'อ.ชื่นอุษา ชลศึกษ์ จันทรา', initials: 'ชจ', grad: 'linear-gradient(135deg,#C2410C,#F59E0B)',
+      title: 'PARTNER · LEADERSHIP', spec: 'Inclusive Teamwork · ภาวะผู้นำสร้างทีมที่หลากหลาย',
+      courses: 2, url: 'https://cuneuron.chula.ac.th/course-detail/173' },
+    { name: 'คุณณัชชา โกมลฐิติ', initials: 'ณช', grad: 'linear-gradient(135deg,#EC4899,#7A0040)',
+      title: 'PARTNER · UX/UI', spec: 'การออกแบบแอปพลิเคชันให้ผู้ใช้งานประทับใจ',
+      courses: 1, url: 'https://cuneuron.chula.ac.th/course-detail/192' },
+    { name: 'รศ.ดร.โปรดปราน บุณยพุกกณะ', initials: 'ปบ', grad: 'linear-gradient(135deg,#1E3A8A,#0EA5E9)',
+      title: 'CHULA · COMPUTER SCI.', spec: 'Data and its Relationship · Database Design',
+      courses: 2, url: 'https://cuneuron.chula.ac.th/course-detail/200' },
+  ];
+
+  function instrCardHtml(i) {
+    return `
+      <a href="${i.url}" target="_blank" rel="noopener" class="instr-card">
+        <div class="instr-avatar" style="background:${i.grad}">
+          <span>${i.initials}</span>
+          <span class="instr-check" title="Verified Chula instructor">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </span>
+        </div>
+        <div class="instr-info">
+          <div class="instr-title">${i.title}</div>
+          <div class="instr-name">${i.name}</div>
+          <div class="instr-spec">${i.spec}</div>
+        </div>
+        <div class="instr-foot">
+          <span class="count"><strong>${i.courses}</strong> คอร์ส</span>
+          <span class="instr-cta">ดูโปรไฟล์ →</span>
+        </div>
+      </a>
+    `;
+  }
+
+  document.getElementById('rail-instructors').innerHTML = INSTRUCTORS.map(instrCardHtml).join('');
+
+  // Wire up rail-nav buttons for this rail (they aren't picked up by the earlier
+  // Course Explore listener because that script ran before this DOM was parsed)
+  document.querySelectorAll('.rail-btn[data-rail="instructors"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const rail = document.getElementById('rail-instructors');
+      const dir = parseInt(btn.dataset.dir, 10);
+      rail.scrollBy({ left: dir * (rail.clientWidth * 0.8), behavior: 'smooth' });
+    });
+  });
+</script>
+
+<!-- ───────── LEARNING PATHS ───────── -->
+<section class="block" id="paths" style="padding-top:0;">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <span class="section-pill">Career Paths</span>
+        <h2>เส้นทางอาชีพ พร้อมประกาศนียบัตรชุด</h2>
+        <p class="sub">รวม 4–8 คอร์สที่ออกแบบเป็นชุด เรียนจบแล้วได้ปริญญาบัตรชุดวิชาที่ระบุชัดเจน</p>
+      </div>
+      <a href="#" class="btn btn-outline btn-sm">ดูทั้งหมด 32 เส้นทาง →</a>
+    </div>
+
+    <div class="paths">
+      <div class="path-card p-1">
+        <span class="path-eyebrow">AI & Data · 6 เดือน</span>
+        <h3>Data Scientist สาย Business</h3>
+        <p>จาก Excel สู่ Python และ ML — สร้าง portfolio จริงจากโจทย์องค์กรไทย</p>
+        <div class="path-modules">
+          <div class="path-mod done"><div class="num">✓</div><div class="lbl">Statistics for Decisions</div></div>
+          <div class="path-mod done"><div class="num">✓</div><div class="lbl">Python for Data Analysis</div></div>
+          <div class="path-mod"><div class="num">3</div><div class="lbl">SQL & Data Warehousing</div></div>
+          <div class="path-mod"><div class="num">4</div><div class="lbl">Machine Learning Foundations</div></div>
+          <div class="path-mod"><div class="num">5</div><div class="lbl">Capstone Project</div></div>
+        </div>
+        <div class="path-foot">
+          <div class="meta"><strong>2 / 5</strong> โมดูล · เหลือ 14 สัปดาห์</div>
+          <button class="btn btn-primary btn-sm">เรียนต่อ →</button>
+        </div>
+      </div>
+
+      <div class="path-card p-2">
+        <span class="path-eyebrow">Business · 5 เดือน</span>
+        <h3>Sustainable Business Leader</h3>
+        <p>กลยุทธ์ ESG การเงินสีเขียว และการรายงานที่ตรวจสอบได้ตามมาตรฐานสากล</p>
+        <div class="path-modules">
+          <div class="path-mod"><div class="num">1</div><div class="lbl">ESG Foundations</div></div>
+          <div class="path-mod"><div class="num">2</div><div class="lbl">Carbon Accounting</div></div>
+          <div class="path-mod"><div class="num">3</div><div class="lbl">Sustainable Finance</div></div>
+          <div class="path-mod"><div class="num">4</div><div class="lbl">Stakeholder Engagement</div></div>
+          <div class="path-mod"><div class="num">5</div><div class="lbl">Reporting & Assurance</div></div>
+        </div>
+        <div class="path-foot">
+          <div class="meta"><strong>เริ่มต้น</strong> · ใบรับรองชุด</div>
+          <button class="btn btn-dark btn-sm">ลงทะเบียน →</button>
+        </div>
+      </div>
+
+      <div class="path-card p-3">
+        <span class="path-eyebrow">Healthcare · 4 เดือน</span>
+        <h3>Healthcare Manager 4.0</h3>
+        <p>การบริหารงานสาธารณสุขในยุคดิจิทัล จาก Chula Medicine และเครือข่ายโรงพยาบาล</p>
+        <div class="path-modules">
+          <div class="path-mod"><div class="num">1</div><div class="lbl">Health Systems Thinking</div></div>
+          <div class="path-mod"><div class="num">2</div><div class="lbl">Digital Health & Data</div></div>
+          <div class="path-mod"><div class="num">3</div><div class="lbl">Operations & Quality</div></div>
+          <div class="path-mod"><div class="num">4</div><div class="lbl">Leadership in Crisis</div></div>
+        </div>
+        <div class="path-foot">
+          <div class="meta"><strong>ใหม่</strong> · เปิดรับ ก.ค. 2026</div>
+          <button class="btn btn-dark btn-sm">รอบเปิดรับ →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── LMS BANNER ───────── -->
+<section class="block" style="padding-top:0;">
+  <div class="wrap">
+    <div class="lms-banner">
+      <div style="position:relative; z-index:1;">
+        <span class="eyebrow" style="background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.25); color:#fff;"><span class="dot" style="background:#fff; box-shadow:0 0 0 4px rgba(255,255,255,.25)"></span> Single Sign-On · เชื่อมต่อระบบเดียวจบ</span>
+        <h2 style="line-height: 1.5">เรียนต่อในห้องเรียนของคุณ</h2>
+        <p>หลังจากลงทะเบียน คุณจะเข้าถึง LMS — Learning Management System ของจุฬาฯ เพื่อเรียนวิดีโอ ทำแบบฝึกหัด เข้า Live Class และดาวน์โหลดเอกสาร ทั้งหมดในที่เดียว</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a href="#" class="btn" style="background:#fff; color:var(--pink-700);">ไปยัง LMS →</a>
+          <a href="#" class="btn btn-ghost" style="color:#fff; border:1px solid rgba(255,255,255,.4);">ดูคู่มือผู้เรียน</a>
+        </div>
+
+        <div style="display:flex; gap:24px; margin-top:36px; flex-wrap:wrap;">
+          <div>
+            <div style="font-family:var(--font-display); font-weight:700; font-size:22px;">วิดีโอ HD</div>
+            <div style="font-size:13px; opacity:.85;">เล่นต่อจากเดิม + คำบรรยายไทย</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-display); font-weight:700; font-size:22px;">Live & Forum</div>
+            <div style="font-size:13px; opacity:.85;">ถามอาจารย์ ทำกลุ่ม</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-display); font-weight:700; font-size:22px;">Mobile App</div>
+            <div style="font-size:13px; opacity:.85;">เรียนออฟไลน์ได้</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lms-mockup">
+        <div class="mk-head">
+          <div class="mk-dots"><span></span><span></span><span></span></div>
+          <div class="mk-title">lms.chulaxl.chula.ac.th · บทที่ 4 — Prompt Patterns</div>
+        </div>
+        <div class="mk-video">
+          <div class="mk-play">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="mk-progress"><span></span></div>
+        <div class="mk-meta">
+          <span>26:14 / 40:00</span>
+          <span>บทที่ 4 จาก 8</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── COURSE PARTNERS ───────── -->
+<section class="block partners" id="partners">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <span class="section-pill">Course Partners</span>
+        <h2>เรียนจาก 8 คณะของจุฬาฯ ร่วมกับหน่วยงานรัฐ &amp; พันธมิตร</h2>
+        <p class="sub">เนื้อหาทุกหลักสูตรผลิตโดยคณาจารย์จุฬาฯ ร่วมกับหน่วยงานรัฐและองค์กรชั้นนำ เพื่อยกระดับทักษะคนไทย</p>
+      </div>
+      <a href="#" class="btn btn-outline btn-sm">เป็นพันธมิตรกับเรา →</a>
+    </div>
+
+    <!-- Chula faculties (production sources for CHULA MOOC) -->
+    <div style="font-size:12.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-500); margin-bottom:12px;">คณะของจุฬาฯ</div>
+    <div class="partner-grid">
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#7A0040">ENG</div><div><div class="partner-name">คณะวิศวกรรมศาสตร์</div><div class="partner-count">เทคโนโลยี &amp; AI</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#C2410C">ART</div><div><div class="partner-name">คณะอักษรศาสตร์</div><div class="partner-count">ภาษาไทย/ต่างประเทศ</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#1E3A8A">CBS</div><div><div class="partner-name">คณะพาณิชยศาสตร์และการบัญชี</div><div class="partner-count">การจัดการ &amp; การเงิน</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#047857">MED</div><div><div class="partner-name">คณะแพทยศาสตร์</div><div class="partner-count">สุขภาพ &amp; สาธารณสุข</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#6D28D9">PHA</div><div><div class="partner-name">คณะเภสัชศาสตร์</div><div class="partner-count">สมุนไพร &amp; เครื่องสำอาง</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#B91C1C">LAW</div><div><div class="partner-name">คณะนิติศาสตร์</div><div class="partner-count">กฎหมาย &amp; PDPA</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#0369A1">POL</div><div><div class="partner-name">คณะรัฐศาสตร์</div><div class="partner-count">สังคมศาสตร์ &amp; การสื่อสาร</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#0F766E">EDU</div><div><div class="partner-name">คณะครุศาสตร์</div><div class="partner-count">การพัฒนาตนเอง</div></div></a>
+    </div>
+
+    <!-- Government & industry partners (real partners visible in CHULA MOOC) -->
+    <div style="font-size:12.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-500); margin:32px 0 12px;">หน่วยงานรัฐ &amp; องค์กรพันธมิตร</div>
+    <div class="partner-grid">
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#0B3D2E; font-size:11px;">กลาโหม</div><div><div class="partner-name">กระทรวงกลาโหม</div><div class="partner-count">15+ คอร์ส · พัฒนาบุคลากร</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#B71C2C; font-size:13px;">ธอส.</div><div><div class="partner-name">ธนาคารอาคารสงเคราะห์</div><div class="partner-count">AI &amp; Productivity</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#5B21B6; font-size:14px;">วธ.</div><div><div class="partner-name">กระทรวงวัฒนธรรม</div><div class="partner-count">รู้เท่าทันสื่อ &amp; ดิจิทัล</div></div></a>
+      <a href="#" class="partner-card"><div class="partner-mark" style="background:#9E0056; font-size:10px;">Chula XL</div><div><div class="partner-name">วิทยาลัยส่งเสริมการเรียนรู้ตลอดชีวิตฯ</div><div class="partner-count">ผู้ดูแลแพลตฟอร์ม (Chula XL)</div></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── FOOTER ───────── -->
+<footer class="site-footer">
+  <div class="wrap">
+
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand">
+          <img src="https://d1xutesu22jhtx.cloudfront.net/paas-landing-web/lll-cu-landing/logo/lll-logo.png" alt="ChulaXL" class="brand-logo brand-logo-light" />
+        </div>
+        <p class="foot-about">แพลตฟอร์มการเรียนรู้ตลอดชีวิตของจุฬาลงกรณ์มหาวิทยาลัย ดำเนินงานโดย Chula XL รวบรวมหลักสูตรที่เปิดให้ทุกคนเข้าถึงความรู้ระดับมหาวิทยาลัยได้ทุกที่ทุกเวลา</p>
+        <div class="foot-org">วิทยาลัยส่งเสริมการเรียนรู้ตลอดชีวิตเพื่อประชาชนแห่งจุฬาลงกรณ์มหาวิทยาลัย (Chula XL)
+College of Extension and Lifelong Learning for the People, Chulalongkorn University
+จุฬาลงกรณ์มหาวิทยาลัย ถนนพญาไท แขวงวังใหม่ เขตปทุมวัน กรุงเทพฯ 10330
+โทร 02-218-0000 · อีเมล hello@chulaxl.chula.ac.th</div>
+      </div>
+
+      <div class="foot-col">
+        <h4>ผู้เรียน</h4>
+        <ul>
+          <li><a href="#">เข้าสู่ระบบ / LMS</a></li>
+          <li><a href="#">หลักสูตรทั้งหมด</a></li>
+          <li><a href="#">เส้นทางอาชีพ</a></li>
+          <li><a href="#">ปริญญาบัตรชุดวิชา</a></li>
+          <li><a href="#">หลักสูตรฟรี</a></li>
+          <li><a href="#">คู่มือผู้เรียน</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h4>องค์กร & พันธมิตร</h4>
+        <ul>
+          <li><a href="#">ChulaXL for Business</a></li>
+          <li><a href="#">เป็นพันธมิตรกับเรา</a></li>
+          <li><a href="#">สอน / สร้างคอร์ส</a></li>
+          <li><a href="#">ข่าวประชาสัมพันธ์</a></li>
+          <li><a href="#">รายงานประจำปี</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h4>เกี่ยวกับเรา</h4>
+        <ul>
+          <li><a href="#">เกี่ยวกับ ChulaXL</a></li>
+          <li><a href="#">วิสัยทัศน์ & พันธกิจ</a></li>
+          <li><a href="#">ทีมงาน</a></li>
+          <li><a href="#">ร่วมงานกับเรา</a></li>
+          <li><a href="#">ติดต่อเรา</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col col-extra">
+        <h4>ช่วยเหลือ</h4>
+        <ul>
+          <li><a href="#">ศูนย์ช่วยเหลือ</a></li>
+          <li><a href="#">คำถามที่พบบ่อย</a></li>
+          <li><a href="#">การชำระเงิน</a></li>
+          <li><a href="#">การคืนเงิน</a></li>
+          <li><a href="#">รายงานปัญหา</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col foot-col--app">
+        <h4>โหลดแอป</h4>
+        <p style="font-size:12.5px; color:#9A94A4; margin:0 0 12px; line-height:1.55;">เรียนได้ทุกที่ ทุกเวลา · iOS &amp; Android</p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <a href="#" target="_blank" rel="noopener" aria-label="Download on the App Store" style="display:inline-block; transition:transform .15s, filter .15s;">
+            <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/download_on_the_app_store_badge_en.svg?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="Download on the App Store" style="height:38px; width:auto; display:block; border-radius:6px;" />
+          </a>
+          <a href="#" target="_blank" rel="noopener" aria-label="Get it on Google Play" style="display:inline-block; transition:transform .15s, filter .15s;">
+            <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/en_generic_rgb_wo_45.png?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="Get it on Google Play" style="height:38px; width:auto; display:block; border-radius:6px;" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-partners">
+      <div class="foot-partners-head">Course Partners — เครือข่ายผู้ผลิตเนื้อหา</div>
+      <div class="foot-partner-grid">
+        <a href="#">คณะวิศวกรรมศาสตร์</a>
+        <a href="#">คณะอักษรศาสตร์</a>
+        <a href="#">คณะพาณิชยศาสตร์และการบัญชี</a>
+        <a href="#">คณะแพทยศาสตร์</a>
+        <a href="#">คณะเภสัชศาสตร์</a>
+        <a href="#">คณะนิติศาสตร์</a>
+        <a href="#">คณะรัฐศาสตร์</a>
+        <a href="#">คณะครุศาสตร์</a>
+        <a href="#">คณะวิทยาศาสตร์</a>
+        <a href="#">คณะเศรษฐศาสตร์</a>
+        <a href="#">คณะจิตวิทยา</a>
+        <a href="#">กระทรวงกลาโหม</a>
+        <a href="#">ธนาคารอาคารสงเคราะห์ (ธอส.)</a>
+        <a href="#">กระทรวงวัฒนธรรม</a>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <div>© 2026 จุฬาลงกรณ์มหาวิทยาลัย · ChulaXL · สงวนลิขสิทธิ์</div>
+      <div class="links">
+        <a href="#">เงื่อนไขการใช้บริการ</a>
+        <a href="#">นโยบายความเป็นส่วนตัว</a>
+        <a href="#">PDPA</a>
+        <a href="#">การเข้าถึง</a>
+      </div>
+      <div class="foot-social">
+        <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-9h3l.5-4H13V6.5c0-1 .3-1.7 1.8-1.7H17V1.2C16.6 1.1 15.3 1 13.8 1 10.8 1 8.7 2.9 8.7 6.2V9H5.5v4h3.2v9H13z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.5c-.2-1.4-1-2.4-2.4-2.6C18.4 4.5 12 4.5 12 4.5s-6.4 0-8.6.4C2 5.1 1.2 6.1 1 7.5.6 9.7.6 12 .6 12s0 2.3.4 4.5c.2 1.4 1 2.4 2.4 2.6 2.2.4 8.6.4 8.6.4s6.4 0 8.6-.4c1.4-.2 2.2-1.2 2.4-2.6.4-2.2.4-4.5.4-4.5s0-2.3-.4-4.5zM10 15.5v-7l6 3.5-6 3.5z"/></svg></a>
+        <a href="#" aria-label="LINE"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.5 2 11c0 3 2 5.5 5 7v3l3-2c.7.1 1.3.2 2 .2 5.5 0 10-3.5 10-8s-4.5-8.2-10-8.2z"/></svg></a>
+        <a href="#" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 3h2.9l-6.4 7.3L22 21h-5.8l-4.5-5.9L6.3 21H3.4l6.8-7.8L2 3h6l4.1 5.4L18.2 3zm-1 16h1.6L7 4.7H5.2L17.2 19z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ───────── LOGIN MODAL ───────── -->
+<div class="modal-overlay" id="loginModal" style="display:none;" onclick="if(event.target===this) closeLogin()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" onclick="closeLogin()" aria-label="ปิด">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+
+    <div class="modal-head">
+      <div class="brand-mark">CX</div>
+      <h2 id="modalTitle">เข้าสู่ระบบ ChulaXL</h2>
+      <p>เริ่มเรียนต่อจากเดิม หรือสมัครเรียนหลักสูตรใหม่</p>
+    </div>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="setTab('login')">เข้าสู่ระบบ</button>
+      <button class="modal-tab" id="tab-signup" onclick="setTab('signup')">สมัครสมาชิก</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- ThaID prominent -->
+      <button class="social-btn thaid">
+        <span class="glyph sb-thaid">ThaID</span>
+        <div>
+          <div>เข้าสู่ระบบด้วย ThaID</div>
+          <div style="font-size:11.5px; color:var(--ink-500); font-weight:500;">ยืนยันตัวตนของรัฐ · ปลอดภัยที่สุด</div>
+        </div>
+        <span class="badge">Recommended</span>
+      </button>
+
+      <div class="divider">หรือใช้ Social Network</div>
+
+      <div class="social-grid">
+        <button class="social-btn">
+          <span class="glyph sb-google">
+            <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M21.5 12.2c0-.7 0-1.4-.2-2H12v3.8h5.4c-.2 1.2-1 2.3-2 3v2.5h3.3c2-1.8 3-4.5 3-7.3z"/><path fill="#34A853" d="M12 22c2.7 0 5-1 6.7-2.5l-3.3-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.2H3v2.6C4.7 19.7 8.1 22 12 22z"/><path fill="#FBBC05" d="M6.4 13.8c-.2-.6-.3-1.2-.3-1.8s.1-1.2.3-1.8V7.6H3c-.7 1.3-1 2.8-1 4.4s.4 3.1 1 4.4l3.4-2.6z"/><path fill="#EA4335" d="M12 5.8c1.5 0 2.8.5 3.8 1.5l2.9-2.9C16.9 2.7 14.7 2 12 2 8.1 2 4.7 4.3 3 7.6l3.4 2.6C7.2 7.6 9.4 5.8 12 5.8z"/></svg>
+          </span>
+          เข้าสู่ระบบด้วย Google
+        </button>
+        <button class="social-btn">
+          <span class="glyph sb-fb">f</span>
+          เข้าสู่ระบบด้วย Facebook
+        </button>
+        <button class="social-btn">
+          <span class="glyph sb-line">L</span>
+          เข้าสู่ระบบด้วย LINE
+        </button>
+        <button class="social-btn">
+          <span class="glyph sb-apple"></span>
+          เข้าสู่ระบบด้วย Apple
+        </button>
+      </div>
+
+      <div class="divider">หรือใช้อีเมล</div>
+
+      <div class="input-group">
+        <label>อีเมล</label>
+        <input type="email" placeholder="you@example.com" />
+      </div>
+      <div class="input-group">
+        <label>รหัสผ่าน</label>
+        <input type="password" placeholder="••••••••" />
+      </div>
+
+      <button class="btn btn-primary btn-block btn-lg" style="margin-top:6px;">เข้าสู่ระบบ</button>
+
+      <div class="modal-foot">
+        การใช้งานหมายความว่าคุณยอมรับ <a href="#">เงื่อนไขการใช้บริการ</a> และ <a href="#">นโยบายความเป็นส่วนตัว</a> ของ ChulaXL
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Modal controls
+  function openLogin(tab) {
+    document.getElementById('loginModal').style.display = 'grid';
+    document.body.style.overflow = 'hidden';
+    if (tab) setTab(tab);
+  }
+  function closeLogin() {
+    document.getElementById('loginModal').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  function setTab(which) {
+    document.getElementById('tab-login').classList.toggle('active', which === 'login');
+    document.getElementById('tab-signup').classList.toggle('active', which === 'signup');
+    document.getElementById('modalTitle').textContent =
+      which === 'signup' ? 'สมัครสมาชิก ChulaXL' : 'เข้าสู่ระบบ ChulaXL';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLogin(); });
+
+  // Toggleable category tabs (visual only)
+  document.querySelectorAll('.cat-tabs').forEach(group => {
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('.cat-tab');
+      if (!btn) return;
+      group.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Lang toggle (visual)
+  document.querySelectorAll('.lang-toggle').forEach(group => {
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Bookmark toggle
+  document.querySelectorAll('.cover-bookmark').forEach(b => {
+    b.addEventListener('click', e => {
+      e.preventDefault();
+      b.classList.toggle('active');
+      const path = b.querySelector('path');
+      if (b.classList.contains('active')) {
+        path.setAttribute('fill', 'currentColor');
+        path.removeAttribute('stroke');
+      } else {
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', 'currentColor');
+        path.setAttribute('stroke-width', '2');
+      }
+    });
+  });
+
+  // Quiz option select
+  document.querySelectorAll('.pz-options').forEach(group => {
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('.pz-option');
+      if (!btn) return;
+      group.querySelectorAll('.pz-option').forEach(b => b.classList.remove('sel'));
+      btn.classList.add('sel');
+    });
+  });
+</script>
+
+<!-- ───────── TWEAKS PANEL (React + Babel) ───────── -->
+<div id="tweaks-root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks.jsx"></script>
+
+
+<script>
+  // Search flyout open/close
+  (function() {
+    function openSearch(c) { c.classList.add('open'); document.body.classList.add('search-open'); }
+    function closeAll() {
+      document.querySelectorAll('.nav-search.open').forEach(c => c.classList.remove('open'));
+      document.body.classList.remove('search-open');
+    }
+    document.querySelectorAll('.nav-search').forEach(container => {
+      const input = container.querySelector('input');
+      if (!input) return;
+      input.addEventListener('focus', () => openSearch(container));
+      input.addEventListener('click', () => openSearch(container));
+    });
+    document.addEventListener('click', e => {
+      document.querySelectorAll('.nav-search.open').forEach(c => {
+        if (!c.contains(e.target)) closeAll();
+      });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeAll();
+    });
+    // Click backdrop closes
+    document.querySelectorAll('.search-backdrop').forEach(bd => {
+      bd.addEventListener('click', closeAll);
+    });
+  })();
+</script>
+
+<script>
+  // Hero slideshow
+  (function() {
+    const ss = document.getElementById('hero-slideshow');
+    const track = document.getElementById('hero-track');
+    if (!ss || !track) return;
+    const slides = track.querySelectorAll('.hero-slide');
+    const dotsEl = ss.querySelector('.hero-dots');
+    const dots = dotsEl ? dotsEl.querySelectorAll('.hero-dot') : [];
+    let idx = 0;
+    let timer = null;
+    const INTERVAL = 5000;
+
+    function go(i) {
+      idx = (i + slides.length) % slides.length;
+      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      dots.forEach((d, di) => {
+        d.classList.toggle('active', di === idx);
+        d.setAttribute('aria-selected', di === idx ? 'true' : 'false');
+      });
+      // Adjust dot colors when on dark slide
+      const isDark = slides[idx].classList.contains('hero-slide--app');
+      if (dotsEl) dotsEl.dataset.onDark = isDark ? 'true' : 'false';
+    }
+
+    function startAuto() {
+      stopAuto();
+      timer = setInterval(() => go(idx + 1), INTERVAL);
+    }
+    function stopAuto() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    dots.forEach(d => {
+      d.addEventListener('click', () => {
+        go(parseInt(d.dataset.go, 10));
+        startAuto();
+      });
+    });
+
+    // Pause on hover
+    ss.addEventListener('mouseenter', stopAuto);
+    ss.addEventListener('mouseleave', startAuto);
+
+    // Keyboard
+    document.addEventListener('keydown', e => {
+      // Only respond when no inputs are focused
+      if (document.activeElement && /input|textarea/i.test(document.activeElement.tagName)) return;
+      if (e.key === 'ArrowLeft') { go(idx - 1); startAuto(); }
+      else if (e.key === 'ArrowRight') { go(idx + 1); startAuto(); }
+    });
+
+    // Initial
+    go(0);
+    startAuto();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>คอร์สเรียน · ChulaXL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+Thai:ital,wght@0,500;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Chula brand fonts */
+  @font-face { font-family: "Chulalongkorn"; src: url("fonts/CHULALONGKORNBold.otf") format("opentype"); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Chulalongkorn"; src: url("fonts/CHULALONGKORNReg.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: "ChulaCharas"; src: url("fonts/ChulaCharasNewBold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: "ChulaCharas"; src: url("fonts/ChulaCharasNewReg.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: "ChulaCharas"; src: url("fonts/ChulaCharasNewIta.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
+
+  .brand-logo { height: 40px; width: auto; display: block; }
+  .site-footer .brand {
+    display: inline-flex;
+    background: #fff;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 12px 30px -12px rgba(0,0,0,.5);
+  }
+  .site-footer .brand .brand-logo { height: 36px; }
+
+  body { background: var(--bg); font-family: "IBM Plex Sans Thai", "Manrope", system-ui, sans-serif; }
+
+  /* ─── Course Detail HERO ─── */
+  .cd-hero {
+    background: linear-gradient(180deg, #FFF7FB 0%, #FFFFFF 100%);
+    padding: 24px 0 56px;
+    border-bottom: 1px solid var(--ink-100);
+  }
+  .cd-breadcrumb {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    font-size: 13px; color: var(--ink-500);
+    margin-bottom: 28px;
+  }
+  .cd-breadcrumb a { color: var(--pink-700); font-weight: 600; }
+  .cd-breadcrumb a:hover { color: var(--pink-500); text-decoration: underline; }
+  .cd-breadcrumb .sep { color: var(--ink-300); }
+  .cd-breadcrumb .current { color: var(--ink-900); font-weight: 600; }
+
+  .cd-hero-grid {
+    display: grid; grid-template-columns: 1fr 360px; gap: 40px;
+    align-items: start;
+  }
+
+  .cd-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .cd-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+    border-radius: 999px;
+  }
+  .cd-pill-cat { background: var(--pink-50); color: var(--pink-700); }
+  .cd-pill-partner { background: var(--ink-100); color: var(--ink-700); }
+  .cd-pill-credit {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FCD34D 100%);
+    color: #78350F;
+  }
+  .cd-pill-credit svg { width: 13px; height: 13px; }
+  .cd-pill-best {
+    background: var(--ink-900); color: #fff;
+  }
+
+  .cd-title {
+    font-family: "Chulalongkorn", "IBM Plex Sans Thai", "Manrope", sans-serif;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin: 0 0 18px;
+    color: var(--ink-900);
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  .cd-hero-meta {
+    display: flex; gap: 24px; flex-wrap: wrap; align-items: center;
+    font-size: 13.5px; color: var(--ink-600);
+    margin-bottom: 22px;
+  }
+  .cd-rating {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 600;
+  }
+  .cd-rating .num {
+    background: var(--gold);
+    color: var(--ink-900);
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-family: var(--font-display);
+  }
+  .cd-rating .stars { color: #F59E0B; }
+  .cd-rating .count { color: var(--pink-700); text-decoration: underline; }
+  .cd-meta-item { display: inline-flex; align-items: center; gap: 6px; }
+  .cd-meta-item svg { color: var(--ink-400); }
+
+  .cd-hero-instructor {
+    font-size: 13.5px;
+    margin-bottom: 22px;
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--ink-600);
+  }
+  .cd-hero-instructor a {
+    color: var(--pink-700);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  /* Hero video preview */
+  .cd-video {
+    position: relative;
+    aspect-ratio: 16/9;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--ink-100);
+    box-shadow: 0 12px 30px -12px rgba(15,10,20,.18);
+    cursor: pointer;
+  }
+  .cd-video img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .cd-video::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.4));
+  }
+  .cd-video .play {
+    position: absolute;
+    inset: 0; margin: auto;
+    width: 72px; height: 72px;
+    background: rgba(255,255,255,.95);
+    border-radius: 99px;
+    display: grid; place-items: center;
+    color: var(--pink-700);
+    z-index: 2;
+    transition: transform .15s;
+  }
+  .cd-video:hover .play { transform: scale(1.08); }
+  .cd-video .vlabel {
+    position: absolute; bottom: 14px; left: 16px;
+    color: #fff; font-size: 13px; font-weight: 600; z-index: 2;
+    text-shadow: 0 1px 4px rgba(0,0,0,.4);
+  }
+
+  /* Sticky CTA card */
+  .cd-aside { position: sticky; top: 88px; align-self: start; }
+  .cd-cta-card {
+    background: #fff;
+    border: 1px solid var(--ink-200);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px -12px rgba(15,10,20,.1);
+  }
+  .cd-cta-cover { aspect-ratio: 16/10; position: relative; background: var(--ink-100); }
+  .cd-cta-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cd-cta-body { padding: 22px; }
+  .cd-price-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+  .cd-price {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: var(--ink-900);
+  }
+  .cd-price-old {
+    text-decoration: line-through;
+    color: var(--ink-400);
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .cd-price-disc {
+    background: #FEE2E2;
+    color: #B91C1C;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 8px; border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+  .cd-urgency {
+    color: #B91C1C;
+    font-size: 12.5px; font-weight: 600;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cd-urgency svg { color: #B91C1C; }
+
+  .cd-cta-buttons { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+  .cd-cta-buttons .btn { padding: 14px 18px; font-size: 15px; border-radius: 10px; }
+
+  .cd-guarantee {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-500);
+    padding: 8px 0 12px;
+  }
+
+  .cd-includes-head {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    margin: 8px 0 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink-100);
+  }
+  .cd-includes { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .cd-includes li { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--ink-700); }
+  .cd-includes svg { color: var(--ink-500); flex-shrink: 0; }
+
+  .cd-share-row {
+    margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--ink-100);
+    display: flex; justify-content: space-between; gap: 8px;
+    font-size: 12.5px; font-weight: 600;
+  }
+  .cd-share-row a { color: var(--pink-700); display: inline-flex; align-items: center; gap: 5px; }
+  .cd-share-row a:hover { color: var(--pink-500); }
+
+  /* ─── Content section ─── */
+  .cd-content { padding: 56px 0 80px; }
+  .cd-content-grid {
+    display: block;
+  }
+  .cd-body-aside-stub { display: none; }
+  .cd-section { margin-bottom: 44px; }
+  .cd-section h2 {
+    font-family: "Chulalongkorn", "IBM Plex Sans Thai", sans-serif;
+    font-size: 24px; font-weight: 700; letter-spacing: -0.015em;
+    margin: 0 0 18px;
+    color: var(--ink-900);
+  }
+  .cd-lede {
+    font-family: "IBM Plex Sans Thai", "Manrope", sans-serif;
+    font-size: 17px;
+    color: var(--ink-600);
+    max-width: 720px;
+    margin: 0 0 24px;
+    line-height: 1.55;
+  }
+  .cd-section h2 .meta-link {
+    font-size: 14px; font-weight: 600; color: var(--pink-700);
+    margin-left: 12px;
+  }
+
+  /* What you'll learn */
+  .wyl {
+    border: 1px solid var(--ink-200);
+    border-radius: 14px;
+    padding: 24px 26px;
+    background: #fff;
+  }
+  .wyl-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px;
+  }
+  .wyl-item {
+    display: flex; gap: 10px;
+    font-size: 14.5px; color: var(--ink-800);
+    line-height: 1.45;
+  }
+  .wyl-item svg {
+    flex-shrink: 0;
+    color: var(--pink-700);
+    margin-top: 2px;
+  }
+
+  /* Tags row */
+  .cd-topics { display: flex; gap: 8px; flex-wrap: wrap; }
+  .cd-topic {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid var(--ink-300);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--ink-700);
+    font-weight: 600;
+    background: #fff;
+    transition: border-color .15s, color .15s;
+  }
+  .cd-topic:hover { border-color: var(--pink-500); color: var(--pink-700); }
+
+  /* Course content / curriculum */
+  .cu-summary {
+    font-size: 13.5px; color: var(--ink-600);
+    margin-bottom: 14px;
+    display: flex; gap: 14px; flex-wrap: wrap;
+  }
+  .cu-summary strong { color: var(--ink-900); font-weight: 700; }
+  .cu-section {
+    border: 1px solid var(--ink-200);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: #fff;
+    overflow: hidden;
+  }
+  .cu-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .cu-head:hover { background: var(--pink-50); }
+  .cu-head .l { display: flex; gap: 12px; align-items: center; font-weight: 600; color: var(--ink-900); }
+  .cu-head .l .ch {
+    width: 22px; height: 22px;
+    display: grid; place-items: center;
+    transition: transform .2s;
+  }
+  .cu-section.open .cu-head .l .ch { transform: rotate(90deg); }
+  .cu-head .r { font-size: 13px; color: var(--ink-500); }
+  .cu-body {
+    display: none;
+    border-top: 1px solid var(--ink-100);
+  }
+  .cu-section.open .cu-body { display: block; }
+  .cu-lec {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px;
+    font-size: 14px; color: var(--ink-700);
+  }
+  .cu-lec + .cu-lec { border-top: 1px solid var(--ink-100); }
+  .cu-lec .l { display: flex; gap: 10px; align-items: center; }
+  .cu-lec .l svg { color: var(--ink-400); }
+  .cu-lec .preview { color: var(--pink-700); font-weight: 600; font-size: 12.5px; margin-left: 8px; }
+  .cu-lec .dur { color: var(--ink-500); font-size: 12.5px; }
+
+  /* Requirements / description */
+  .cd-list { list-style: disc; padding-left: 22px; margin: 0; }
+  .cd-list li { padding: 4px 0; color: var(--ink-700); font-size: 15px; line-height: 1.55; }
+
+  .cd-prose { font-size: 15px; color: var(--ink-700); line-height: 1.65; }
+  .cd-prose p { margin: 0 0 14px; }
+  .cd-prose strong { color: var(--ink-900); font-weight: 700; }
+  .cd-showmore {
+    display: inline-flex; align-items: center; gap: 4px;
+    color: var(--pink-700); font-weight: 600; font-size: 14px;
+    margin-top: 4px;
+    cursor: pointer;
+  }
+
+  /* Related courses grid */
+  .cd-related {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .cd-related-card {
+    background: #fff;
+    border: 1px solid var(--ink-200);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none; color: inherit;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+  }
+  .cd-related-card:hover { transform: translateY(-2px); border-color: var(--pink-300); box-shadow: 0 8px 20px -8px rgba(15,10,20,.12); }
+  .cd-related-card .cover {
+    aspect-ratio: 16/10;
+    position: relative;
+    background: var(--ink-100);
+    overflow: hidden;
+  }
+  .cd-related-card .cover img { width: 100%; height: 100%; object-fit: cover; }
+  .cd-related-card .body { padding: 12px 14px; }
+  .cd-related-card .badge {
+    position: absolute; top: 8px; left: 8px;
+    background: var(--ink-900); color: #fff;
+    padding: 3px 8px; border-radius: 4px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .cd-related-card .t {
+    font-family: "Chulalongkorn", "IBM Plex Sans Thai", sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.25;
+    color: var(--ink-900);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    min-height: 2.5em;
+  }
+  .cd-related-card .by { font-size: 11.5px; color: var(--ink-500); margin-top: 4px; }
+  .cd-related-card .rating { font-size: 12px; color: var(--ink-700); font-weight: 600; margin-top: 6px; }
+  .cd-related-card .rating .star { color: #F59E0B; }
+  .cd-related-card .price { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-top: 4px; color: var(--ink-900); }
+  .cd-related-card .price .old { text-decoration: line-through; color: var(--ink-400); font-weight: 500; margin-right: 4px; font-size: 12px; }
+
+  /* Also bought (list-style) */
+  .cd-bought-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .cd-bought-row {
+    display: grid; grid-template-columns: 120px 1fr auto;
+    gap: 16px; align-items: center;
+    background: #fff;
+    border: 1px solid var(--ink-200);
+    border-radius: 12px;
+    padding: 12px;
+    text-decoration: none; color: inherit;
+    transition: border-color .15s, transform .15s;
+  }
+  .cd-bought-row:hover { border-color: var(--pink-300); transform: translateY(-1px); }
+  .cd-bought-row .img { width: 120px; aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; background: var(--ink-100); }
+  .cd-bought-row .img img { width: 100%; height: 100%; object-fit: cover; }
+  .cd-bought-row .b-title { font-family: "Chulalongkorn", "IBM Plex Sans Thai", sans-serif; font-weight: 700; font-size: 16px; color: var(--ink-900); line-height: 1.3; }
+  .cd-bought-row .b-meta { font-size: 12.5px; color: var(--ink-500); margin-top: 4px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .cd-bought-row .b-meta .bs { background: var(--ink-900); color: #fff; padding: 2px 6px; border-radius: 3px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; }
+  .cd-bought-row .b-price { text-align: right; font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--ink-900); }
+
+  /* Instructor profile */
+  .instr-block {
+    display: grid; grid-template-columns: 140px 1fr; gap: 28px;
+    background: #fff;
+    border: 1px solid var(--ink-200);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .instr-block .avatar-l {
+    width: 140px; height: 140px;
+    border-radius: 99px;
+    display: grid; place-items: center;
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 42px;
+    letter-spacing: -0.02em;
+    box-shadow: 0 8px 20px -8px rgba(15,10,20,.25);
+    background: linear-gradient(135deg,#5B21B6,#1E3A8A);
+  }
+  .instr-block .name {
+    font-family: "Chulalongkorn", "IBM Plex Sans Thai", sans-serif;
+    font-size: 22px; font-weight: 700; letter-spacing: -0.01em;
+    color: var(--ink-900);
+    margin: 0 0 4px;
+  }
+  .instr-block .role {
+    font-size: 13.5px; color: var(--ink-500);
+    margin-bottom: 14px;
+  }
+  .instr-stats {
+    display: grid; grid-template-columns: repeat(3, max-content);
+    gap: 6px 20px; font-size: 13.5px; color: var(--ink-600);
+    margin-bottom: 12px;
+  }
+  .instr-stats .s { display: flex; gap: 6px; align-items: center; }
+  .instr-stats .s svg { color: var(--ink-400); }
+  .instr-stats strong { color: var(--ink-900); font-weight: 700; }
+  .instr-bio { font-size: 14.5px; color: var(--ink-700); line-height: 1.55; }
+
+  /* Reviews */
+  .rev-summary {
+    display: flex; gap: 32px; align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .rev-summary .big {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 48px;
+    letter-spacing: -0.02em;
+    color: var(--ink-900);
+  }
+  .rev-summary .stars { color: #F59E0B; font-size: 16px; }
+  .rev-summary .count { font-size: 13.5px; color: var(--ink-500); }
+  .rev-bars { flex: 1; min-width: 240px; }
+  .rev-bar { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--ink-600); margin-bottom: 4px; }
+  .rev-bar .star { color: #F59E0B; min-width: 12px; }
+  .rev-bar .track { flex: 1; height: 8px; background: var(--ink-100); border-radius: 99px; overflow: hidden; }
+  .rev-bar .fill { height: 100%; background: var(--gold); }
+  .rev-bar .pct { min-width: 40px; text-align: right; }
+
+  .rev-list { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .rev-card { background: #fff; border: 1px solid var(--ink-200); border-radius: 12px; padding: 18px; }
+  .rev-head { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
+  .rev-avatar { width: 38px; height: 38px; border-radius: 99px; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 14px; font-family: var(--font-display); flex-shrink: 0; }
+  .rev-name { font-weight: 700; font-size: 14px; color: var(--ink-900); }
+  .rev-when { font-size: 12px; color: var(--ink-500); }
+  .rev-text { font-size: 13.5px; color: var(--ink-700); line-height: 1.55; }
+  .rev-rating { color: #F59E0B; font-size: 13px; margin-bottom: 4px; }
+
+  /* Sticky cover image (right column under hero in body) */
+  .cd-body-aside-stub { /* empty spacer column */ }
+
+  /* Bottom bar (mobile sticky CTA) */
+  .cd-bottom-bar {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid var(--ink-200);
+    padding: 12px 20px;
+    z-index: 30;
+    box-shadow: 0 -8px 20px -8px rgba(15,10,20,.08);
+  }
+  .cd-bottom-bar .inner { display: flex; gap: 12px; align-items: center; }
+  .cd-bottom-bar .price-mini { flex: 1; }
+
+  /* ───── STYLE TWEAK: ACADEMIC vs MARKETPLACE ───── */
+
+  /* MARKETPLACE: keep as defined above (bestseller, urgency, discount visible) */
+  body[data-style="academic"] .cd-pill-best { display: none; }
+  body[data-style="academic"] .cd-price-old,
+  body[data-style="academic"] .cd-price-disc,
+  body[data-style="academic"] .cd-urgency,
+  body[data-style="academic"] .cd-bought-row .b-meta .bs,
+  body[data-style="academic"] .cd-related-card .badge,
+  body[data-style="academic"] .cd-related-card .price .old {
+    display: none;
+  }
+  body[data-style="academic"] .cd-hero {
+    background:
+      radial-gradient(900px 600px at 110% -10%, #FFE7D6 0%, transparent 55%),
+      radial-gradient(700px 500px at -10% 110%, #FFF1F7 0%, transparent 50%),
+      linear-gradient(180deg, #FFFCF8 0%, #FFFFFF 100%);
+    padding-top: 48px;
+    padding-bottom: 72px;
+  }
+  body[data-style="academic"] .cd-title {
+    font-family: "Chulalongkorn", "IBM Plex Sans Thai", "Manrope", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 1.2;
+    font-size: clamp(32px, 4.4vw, 50px);
+  }
+  body[data-style="academic"] .cd-lede {
+    font-family: "IBM Plex Sans Thai", "Manrope", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-600);
+  }
+  body[data-style="academic"] .cd-section h2 {
+    font-family: "Chulalongkorn", "IBM Plex Sans Thai", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 28px;
+  }
+  body[data-style="academic"] .cd-content { padding: 80px 0 96px; }
+  body[data-style="academic"] .cd-section { margin-bottom: 64px; }
+  body[data-style="academic"] .cd-prose { font-size: 16px; line-height: 1.75; }
+  body[data-style="academic"] .cd-prose p { margin-bottom: 18px; }
+  body[data-style="academic"] .cd-cta-card { border-radius: 20px; }
+  body[data-style="academic"] .cd-price { font-weight: 700; color: var(--pink-700); }
+  body[data-style="academic"] .cd-rating .num { background: transparent; color: var(--ink-900); padding: 0; font-family: inherit; font-weight: 700; }
+  body[data-style="academic"] .wyl { background: var(--cream); border-color: rgba(201,154,59,.3); padding: 28px 32px; }
+
+  /* Marketplace adds bolder energy */
+  body[data-style="marketplace"] .cd-hero { padding-top: 28px; }
+  body[data-style="marketplace"] .cd-title { font-family: "Chulalongkorn", "IBM Plex Sans Thai", "Manrope", sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+  body[data-style="marketplace"] .cd-section h2 { font-family: "Chulalongkorn", "IBM Plex Sans Thai", sans-serif; font-weight: 700; }
+
+
+  /* App download mini in CTA */
+  .cd-app-mini {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink-100);
+  }
+  .cd-app-mini-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink-500);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .cd-app-mini-badges {
+    display: flex;
+    gap: 6px;
+  }
+  .cd-app-mini-badges a {
+    flex: 1;
+    transition: transform .15s, filter .15s;
+  }
+  .cd-app-mini-badges a:hover { transform: translateY(-1px); filter: brightness(1.1); }
+  .cd-app-mini-badges img {
+    width: 100%;
+    height: 34px;
+    object-fit: contain;
+    object-position: left center;
+    display: block;
+    border-radius: 6px;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .cd-hero-grid, .cd-content-grid { grid-template-columns: 1fr; }
+    .cd-aside { position: static; }
+    .wyl-grid { grid-template-columns: 1fr; }
+    .cd-related { grid-template-columns: repeat(2, 1fr); }
+    .rev-list { grid-template-columns: 1fr; }
+    .instr-block { grid-template-columns: 1fr; gap: 16px; }
+    .instr-block .avatar-l { width: 88px; height: 88px; font-size: 28px; }
+  }
+  @media (max-width: 720px) {
+    .cd-related { grid-template-columns: 1fr; }
+    .cd-bought-row { grid-template-columns: 80px 1fr; }
+    .cd-bought-row .b-price { grid-column: 2; text-align: left; }
+  }
+</style>
+</head>
+<body data-style="academic">
+<div class="search-backdrop"></div>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a href="index.html" class="brand">
+      <img src="https://d1xutesu22jhtx.cloudfront.net/paas-landing-web/lll-cu-landing/logo/lll-logo.png" alt="ChulaXL — Lifelong Learning by Chulalongkorn University" class="brand-logo" />
+    </a>
+
+    <nav class="nav-links">
+      <a href="index.html#explore" class="nav-link has-caret">สำรวจหลักสูตร</a>
+      <a href="index.html#paths" class="nav-link has-caret">เส้นทางอาชีพ</a>
+      <a href="index.html#partners" class="nav-link">พันธมิตร</a>
+      <a href="index.html#corporate" class="nav-link">สำหรับองค์กร</a>
+    </nav>
+
+    <div class="nav-search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" placeholder="ค้นหาหลักสูตร ทักษะ หรืออาจารย์ผู้สอน…" />
+        <div class="search-flyout">
+          <div class="sf-section">
+            <div class="sf-label">ฮอตใน CHULA MOOC</div>
+            <div class="sf-chips">
+              <a href="#" class="sf-chip">AI</a>
+              <a href="#" class="sf-chip">Python</a>
+              <a href="#" class="sf-chip">ภาษาอังกฤษ</a>
+              <a href="#" class="sf-chip">PDPA</a>
+              <a href="#" class="sf-chip">การลงทุน</a>
+              <a href="#" class="sf-chip">ESG</a>
+              <a href="#" class="sf-chip">Cloud Computing</a>
+              <a href="#" class="sf-chip">Design Thinking</a>
+            </div>
+          </div>
+
+          <div class="sf-section">
+            <div class="sf-label">เริ่มต้นกับคอร์สยอดนิยม</div>
+            <div class="sf-favorites">
+              <a href="course-detail.html?id=283" class="sf-fav">
+                <div class="cover">
+                  <img src="https://mooc.chula.ac.th/img/upload/ไฟฟ้าที่เราใช้มาจากไหน.png" alt="" loading="lazy" />
+                  <span class="seats-badge">4,354 ที่ว่าง</span>
+                </div>
+                <div class="body">
+                  <div class="partner">CHULA · เทคโนโลยี</div>
+                  <div class="title">ไฟฟ้าที่เราใช้มาจากไหน</div>
+                </div>
+              </a>
+              <a href="course-detail.html?id=282" class="sf-fav">
+                <div class="cover">
+                  <img src="https://mooc.chula.ac.th/img/upload/การชวน...ช่วยเลิกบุหรี่.png" alt="" loading="lazy" />
+                  <span class="seats-badge">4,485 ที่ว่าง</span>
+                </div>
+                <div class="body">
+                  <div class="partner">CHULA · สุขภาพ</div>
+                  <div class="title">การชวน...ช่วยเลิกบุหรี่</div>
+                </div>
+              </a>
+              <a href="course-detail.html?id=280" class="sf-fav">
+                <div class="cover">
+                  <img src="https://mooc.chula.ac.th/img/upload/คู่คิดคันจิไฟนอลไฟต์.png" alt="" loading="lazy" />
+                  <span class="seats-badge">3,844 ที่ว่าง</span>
+                </div>
+                <div class="body">
+                  <div class="partner">CHULA · ภาษา</div>
+                  <div class="title">คู่คิดคันจิไฟนอลไฟต์</div>
+                </div>
+              </a>
+              <a href="course-detail.html?id=281" class="sf-fav">
+                <div class="cover">
+                  <img src="https://mooc.chula.ac.th/img/upload/สารออกฤทธิ์จากสมุนไพรเพื่อสร้างสรรค์เครื่องสำอางจากธรรมชาติ.png" alt="" loading="lazy" />
+                  <span class="seats-badge">3,080 ที่ว่าง</span>
+                </div>
+                <div class="body">
+                  <div class="partner">CHULA · การจัดการ</div>
+                  <div class="title">สารออกฤทธิ์จากสมุนไพรฯ</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="sf-foot">
+            <span class="q">ไม่รู้จะเริ่มจากตรงไหน?</span>
+            <a href="onboarding.html">ทำแบบทดสอบสั้น ๆ
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+    </div>
+
+    <div class="nav-actions">
+      <div class="lang-toggle">
+        <button class="active">ไทย</button>
+        <button>EN</button>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="openLogin('login')">เข้าสู่ระบบ</button>
+      <button class="btn btn-primary btn-sm" onclick="openLogin('signup')">สมัครเรียนฟรี</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="cd-hero">
+  <div class="wrap">
+    <nav class="cd-breadcrumb" id="breadcrumb"></nav>
+
+    <div class="cd-hero-grid">
+      <div class="cd-main">
+        <div class="cd-pills" id="cd-pills"></div>
+        <h1 class="cd-title" id="cd-title">กำลังโหลด…</h1>
+        <p class="cd-lede" id="cd-lede"></p>
+
+        <div class="cd-hero-meta" id="cd-hero-meta"></div>
+        <div class="cd-hero-instructor" id="cd-hero-instructor"></div>
+
+        <div class="cd-video" id="cd-video">
+          <img id="cd-video-img" alt="" />
+          <span class="vlabel">ดูตัวอย่างคอร์สนี้</span>
+          <span class="play">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <aside class="cd-aside">
+        <div class="cd-cta-card">
+          <div class="cd-cta-cover">
+            <img id="cd-cta-cover" alt="" />
+          </div>
+          <div class="cd-cta-body">
+            <div class="cd-price-row" id="cd-price-row"></div>
+            <div class="cd-urgency" id="cd-urgency"></div>
+
+            <div class="cd-cta-buttons">
+              <a href="#" class="btn btn-primary btn-block" id="cd-enroll">ลงทะเบียนเรียน</a>
+              <a href="#" class="btn btn-outline btn-block">ทดลองเรียนฟรี</a>
+            </div>
+            <div class="cd-guarantee">รับประกันคืนเงิน 30 วัน · ฟรีตลอดสำหรับเนื้อหา CHULA MOOC</div>
+
+            <div class="cd-app-mini">
+              <div class="cd-app-mini-label">เรียนต่อในแอปได้</div>
+              <div class="cd-app-mini-badges">
+                <a href="#" target="_blank" rel="noopener" aria-label="App Store"><img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/download_on_the_app_store_badge_en.svg?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="" /></a>
+                <a href="#" target="_blank" rel="noopener" aria-label="Google Play"><img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/en_generic_rgb_wo_45.png?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="" /></a>
+              </div>
+            </div>
+
+            <div class="cd-includes-head">คอร์สนี้รวม</div>
+            <ul class="cd-includes" id="cd-includes"></ul>
+
+            <div class="cd-share-row">
+              <a href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.5 10.5 7-4M8.5 13.5l7 4"/></svg> แชร์</a>
+              <a href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h12v17l-6-3.5L6 21z"/></svg> บันทึก</a>
+              <a href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> ของขวัญ</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section class="cd-content">
+  <div class="wrap">
+    <div class="cd-content-grid">
+      <main class="cd-body">
+
+        <div class="cd-section">
+          <h2>สิ่งที่คุณจะได้เรียนรู้</h2>
+          <div class="wyl">
+            <div class="wyl-grid" id="cd-wyl"></div>
+          </div>
+        </div>
+
+        <div class="cd-section">
+          <h2>หัวข้อที่เกี่ยวข้อง</h2>
+          <div class="cd-topics" id="cd-topics"></div>
+        </div>
+
+        <div class="cd-section">
+          <h2>เนื้อหาคอร์ส</h2>
+          <div class="cu-summary" id="cu-summary"></div>
+          <div id="cu-list"></div>
+        </div>
+
+        <div class="cd-section">
+          <h2>คุณสมบัติผู้เรียน</h2>
+          <ul class="cd-list" id="cd-reqs"></ul>
+        </div>
+
+        <div class="cd-section">
+          <h2>เกี่ยวกับคอร์สนี้</h2>
+          <div class="cd-prose" id="cd-desc"></div>
+        </div>
+
+        <div class="cd-section">
+          <h2>คอร์สอื่นในเส้นทางเดียวกัน</h2>
+          <div class="cd-related" id="cd-related"></div>
+        </div>
+
+        <div class="cd-section">
+          <h2>ผู้เรียนคอร์สนี้ยังเลือกเรียน</h2>
+          <div class="cd-bought-list" id="cd-bought"></div>
+        </div>
+
+        <div class="cd-section">
+          <h2>ผู้สอน</h2>
+          <div class="instr-block" id="cd-instr"></div>
+        </div>
+
+        <div class="cd-section">
+          <h2 id="cd-rating-title">★ 4.8 · เสียงสะท้อนจากผู้เรียน</h2>
+          <div class="rev-summary" id="rev-summary"></div>
+          <div class="rev-list" id="rev-list"></div>
+          <button class="btn btn-outline" style="margin-top:16px;">ดูรีวิวทั้งหมด →</button>
+        </div>
+
+        <div class="cd-section">
+          <h2>คอร์สอื่นโดยผู้สอนคนเดียวกัน</h2>
+          <div class="cd-related" id="cd-more-by-instr"></div>
+        </div>
+
+      </main>
+      <div class="cd-body-aside-stub"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER (same as homepage) -->
+<footer class="site-footer">
+  <div class="wrap">
+
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand">
+          <img src="https://d1xutesu22jhtx.cloudfront.net/paas-landing-web/lll-cu-landing/logo/lll-logo.png" alt="ChulaXL" class="brand-logo brand-logo-light" />
+        </div>
+        <p class="foot-about">แพลตฟอร์มการเรียนรู้ตลอดชีวิตของจุฬาลงกรณ์มหาวิทยาลัย ดำเนินงานโดย Chula XL รวบรวมหลักสูตรที่เปิดให้ทุกคนเข้าถึงความรู้ระดับมหาวิทยาลัยได้ทุกที่ทุกเวลา</p>
+        <div class="foot-org">วิทยาลัยส่งเสริมการเรียนรู้ตลอดชีวิตเพื่อประชาชนแห่งจุฬาลงกรณ์มหาวิทยาลัย (Chula XL)
+College of Extension and Lifelong Learning for the People, Chulalongkorn University
+จุฬาลงกรณ์มหาวิทยาลัย ถนนพญาไท แขวงวังใหม่ เขตปทุมวัน กรุงเทพฯ 10330
+โทร 02-218-0000 · อีเมล hello@chulaxl.chula.ac.th</div>
+      </div>
+
+      <div class="foot-col">
+        <h4>ผู้เรียน</h4>
+        <ul>
+          <li><a href="#">เข้าสู่ระบบ / LMS</a></li>
+          <li><a href="index.html#explore">หลักสูตรทั้งหมด</a></li>
+          <li><a href="index.html#paths">เส้นทางอาชีพ</a></li>
+          <li><a href="#">ปริญญาบัตรชุดวิชา</a></li>
+          <li><a href="#">หลักสูตรฟรี</a></li>
+          <li><a href="#">คู่มือผู้เรียน</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h4>องค์กร &amp; พันธมิตร</h4>
+        <ul>
+          <li><a href="#">ChulaXL for Business</a></li>
+          <li><a href="#">เป็นพันธมิตรกับเรา</a></li>
+          <li><a href="#">สอน / สร้างคอร์ส</a></li>
+          <li><a href="#">ข่าวประชาสัมพันธ์</a></li>
+          <li><a href="#">รายงานประจำปี</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h4>เกี่ยวกับเรา</h4>
+        <ul>
+          <li><a href="#">เกี่ยวกับ ChulaXL</a></li>
+          <li><a href="#">วิสัยทัศน์ &amp; พันธกิจ</a></li>
+          <li><a href="#">ทีมงาน</a></li>
+          <li><a href="#">ร่วมงานกับเรา</a></li>
+          <li><a href="#">ติดต่อเรา</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col col-extra">
+        <h4>ช่วยเหลือ</h4>
+        <ul>
+          <li><a href="#">ศูนย์ช่วยเหลือ</a></li>
+          <li><a href="#">คำถามที่พบบ่อย</a></li>
+          <li><a href="#">การชำระเงิน</a></li>
+          <li><a href="#">การคืนเงิน</a></li>
+          <li><a href="#">รายงานปัญหา</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col foot-col--app">
+        <h4>โหลดแอป</h4>
+        <p style="font-size:12.5px; color:#9A94A4; margin:0 0 12px; line-height:1.55;">เรียนได้ทุกที่ ทุกเวลา · iOS &amp; Android</p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <a href="#" target="_blank" rel="noopener" aria-label="Download on the App Store" style="display:inline-block; transition:transform .15s, filter .15s;">
+            <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/download_on_the_app_store_badge_en.svg?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="Download on the App Store" style="height:38px; width:auto; display:block; border-radius:6px;" />
+          </a>
+          <a href="#" target="_blank" rel="noopener" aria-label="Get it on Google Play" style="display:inline-block; transition:transform .15s, filter .15s;">
+            <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/en_generic_rgb_wo_45.png?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="Get it on Google Play" style="height:38px; width:auto; display:block; border-radius:6px;" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-partners">
+      <div class="foot-partners-head">Course Partners — เครือข่ายผู้ผลิตเนื้อหา</div>
+      <div class="foot-partner-grid">
+        <a href="#">คณะวิศวกรรมศาสตร์</a>
+        <a href="#">คณะอักษรศาสตร์</a>
+        <a href="#">คณะพาณิชยศาสตร์และการบัญชี</a>
+        <a href="#">คณะแพทยศาสตร์</a>
+        <a href="#">คณะเภสัชศาสตร์</a>
+        <a href="#">คณะนิติศาสตร์</a>
+        <a href="#">คณะรัฐศาสตร์</a>
+        <a href="#">คณะครุศาสตร์</a>
+        <a href="#">คณะวิทยาศาสตร์</a>
+        <a href="#">คณะเศรษฐศาสตร์</a>
+        <a href="#">คณะจิตวิทยา</a>
+        <a href="#">กระทรวงกลาโหม</a>
+        <a href="#">ธนาคารอาคารสงเคราะห์ (ธอส.)</a>
+        <a href="#">กระทรวงวัฒนธรรม</a>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <div>© 2026 จุฬาลงกรณ์มหาวิทยาลัย · ChulaXL · สงวนลิขสิทธิ์</div>
+      <div class="links">
+        <a href="#">เงื่อนไขการใช้บริการ</a>
+        <a href="#">นโยบายความเป็นส่วนตัว</a>
+        <a href="#">PDPA</a>
+        <a href="#">การเข้าถึง</a>
+      </div>
+      <div class="foot-social">
+        <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-9h3l.5-4H13V6.5c0-1 .3-1.7 1.8-1.7H17V1.2C16.6 1.1 15.3 1 13.8 1 10.8 1 8.7 2.9 8.7 6.2V9H5.5v4h3.2v9H13z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.5c-.2-1.4-1-2.4-2.4-2.6C18.4 4.5 12 4.5 12 4.5s-6.4 0-8.6.4C2 5.1 1.2 6.1 1 7.5.6 9.7.6 12 .6 12s0 2.3.4 4.5c.2 1.4 1 2.4 2.4 2.6 2.2.4 8.6.4 8.6.4s6.4 0 8.6-.4c1.4-.2 2.2-1.2 2.4-2.6.4-2.2.4-4.5.4-4.5s0-2.3-.4-4.5zM10 15.5v-7l6 3.5-6 3.5z"/></svg></a>
+        <a href="#" aria-label="LINE"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.5 2 11c0 3 2 5.5 5 7v3l3-2c.7.1 1.3.2 2 .2 5.5 0 10-3.5 10-8s-4.5-8.2-10-8.2z"/></svg></a>
+        <a href="#" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 3h2.9l-6.4 7.3L22 21h-5.8l-4.5-5.9L6.3 21H3.4l6.8-7.8L2 3h6l4.1 5.4L18.2 3zm-1 16h1.6L7 4.7H5.2L17.2 19z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Data -->
+<script src="course-data.js"></script>
+<script src="course-detail.js"></script>
+
+<!-- Tweaks Panel -->
+<div id="tweaks-root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="course-detail-tweaks.jsx"></script>
+
+<!-- ───────── LOGIN MODAL ───────── -->
+<div class="modal-overlay" id="loginModal" style="display:none;" onclick="if(event.target===this) closeLogin()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" onclick="closeLogin()" aria-label="ปิด">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+
+    <div class="modal-head">
+      <div class="brand-mark">CX</div>
+      <h2 id="modalTitle">เข้าสู่ระบบ ChulaXL</h2>
+      <p>เริ่มเรียนต่อจากเดิม หรือสมัครเรียนหลักสูตรใหม่</p>
+    </div>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="setTab('login')">เข้าสู่ระบบ</button>
+      <button class="modal-tab" id="tab-signup" onclick="setTab('signup')">สมัครสมาชิก</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- ThaID prominent -->
+      <button class="social-btn thaid">
+        <span class="glyph sb-thaid">ThaID</span>
+        <div>
+          <div>เข้าสู่ระบบด้วย ThaID</div>
+          <div style="font-size:11.5px; color:var(--ink-500); font-weight:500;">ยืนยันตัวตนของรัฐ · ปลอดภัยที่สุด</div>
+        </div>
+        <span class="badge">Recommended</span>
+      </button>
+
+      <div class="divider">หรือใช้ Social Network</div>
+
+      <div class="social-grid">
+        <button class="social-btn">
+          <span class="glyph sb-google">
+            <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M21.5 12.2c0-.7 0-1.4-.2-2H12v3.8h5.4c-.2 1.2-1 2.3-2 3v2.5h3.3c2-1.8 3-4.5 3-7.3z"/><path fill="#34A853" d="M12 22c2.7 0 5-1 6.7-2.5l-3.3-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.2H3v2.6C4.7 19.7 8.1 22 12 22z"/><path fill="#FBBC05" d="M6.4 13.8c-.2-.6-.3-1.2-.3-1.8s.1-1.2.3-1.8V7.6H3c-.7 1.3-1 2.8-1 4.4s.4 3.1 1 4.4l3.4-2.6z"/><path fill="#EA4335" d="M12 5.8c1.5 0 2.8.5 3.8 1.5l2.9-2.9C16.9 2.7 14.7 2 12 2 8.1 2 4.7 4.3 3 7.6l3.4 2.6C7.2 7.6 9.4 5.8 12 5.8z"/></svg>
+          </span>
+          เข้าสู่ระบบด้วย Google
+        </button>
+        <button class="social-btn">
+          <span class="glyph sb-fb">f</span>
+          เข้าสู่ระบบด้วย Facebook
+        </button>
+        <button class="social-btn">
+          <span class="glyph sb-line">L</span>
+          เข้าสู่ระบบด้วย LINE
+        </button>
+        <button class="social-btn">
+          <span class="glyph sb-apple"></span>
+          เข้าสู่ระบบด้วย Apple
+        </button>
+      </div>
+
+      <div class="divider">หรือใช้อีเมล</div>
+
+      <div class="input-group">
+        <label>อีเมล</label>
+        <input type="email" placeholder="you@example.com" />
+      </div>
+      <div class="input-group">
+        <label>รหัสผ่าน</label>
+        <input type="password" placeholder="••••••••" />
+      </div>
+
+      <button class="btn btn-primary btn-block btn-lg" style="margin-top:6px;">เข้าสู่ระบบ</button>
+
+      <div class="modal-foot">
+        การใช้งานหมายความว่าคุณยอมรับ <a href="#">เงื่อนไขการใช้บริการ</a> และ <a href="#">นโยบายความเป็นส่วนตัว</a> ของ ChulaXL
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Modal controls (login)
+  function openLogin(tab) {
+    document.getElementById('loginModal').style.display = 'grid';
+    document.body.style.overflow = 'hidden';
+    if (tab) setTab(tab);
+  }
+  function closeLogin() {
+    document.getElementById('loginModal').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  function setTab(which) {
+    document.getElementById('tab-login').classList.toggle('active', which === 'login');
+    document.getElementById('tab-signup').classList.toggle('active', which === 'signup');
+    document.getElementById('modalTitle').textContent =
+      which === 'signup' ? 'สมัครสมาชิก ChulaXL' : 'เข้าสู่ระบบ ChulaXL';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLogin(); });
+
+  // Lang toggle
+  document.querySelectorAll('.lang-toggle').forEach(group => {
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+
+
+<script>
+  // Search flyout open/close
+  (function() {
+    function openSearch(c) { c.classList.add('open'); document.body.classList.add('search-open'); }
+    function closeAll() {
+      document.querySelectorAll('.nav-search.open').forEach(c => c.classList.remove('open'));
+      document.body.classList.remove('search-open');
+    }
+    document.querySelectorAll('.nav-search').forEach(container => {
+      const input = container.querySelector('input');
+      if (!input) return;
+      input.addEventListener('focus', () => openSearch(container));
+      input.addEventListener('click', () => openSearch(container));
+    });
+    document.addEventListener('click', e => {
+      document.querySelectorAll('.nav-search.open').forEach(c => {
+        if (!c.contains(e.target)) closeAll();
+      });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeAll();
+    });
+    // Click backdrop closes
+    document.querySelectorAll('.search-backdrop').forEach(bd => {
+      bd.addEventListener('click', closeAll);
+    });
+  })();
+</script>
+</body>
+</html>
