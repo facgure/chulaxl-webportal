@@ -34,15 +34,19 @@
   function courseCardHtml(c) {
     const grad = platformGrad(c.platform);
     const initial = (c.platform || 'C').charAt(0);
-    const section = esc(c.section || '');
+    // Strip "Platform — " prefix from section (e.g. "MedUMore — ทั่วไป" → "ทั่วไป")
+    const rawSection = c.section || '';
+    const section = esc(rawSection.replace(/^[^—]+—\s*/, ''));
     const title = esc(c.title || '');
-    const isFree = !c.price || (c.price.base === 0 && c.price.sale === 0);
+    const base = parseFloat((c.price && c.price.base) || 0) || 0;
+    const sale = parseFloat((c.price && c.price.sale) || 0) || 0;
+    const isFree = base === 0 && sale === 0;
     const instructor = c.instructors && c.instructors[0] ? esc(c.instructors[0].name) : '';
     const href = esc(c.href || '#');
     const imgHtml = c.coverImageUrl
       ? `<img class="cover-img" src="${esc(c.coverImageUrl)}" alt="" loading="lazy" onerror="this.style.display='none'" />`
       : '';
-    const priceLabel = isFree ? 'ฟรี' : `${(c.price.sale || c.price.base).toLocaleString()} ฿`;
+    const priceLabel = isFree ? 'ฟรี' : `${(sale || base).toLocaleString()} ฿`;
 
     return `
       <a href="${href}" target="_blank" rel="noopener" class="course-card">
@@ -255,7 +259,7 @@
                 </div>
               </a>`).join('')}
           </div>
-          <button class="sf-see-all" onclick="window.searchAllCourses('${esc(q).replace(/'/g, "\\'")}')">
+          <button class="sf-see-all" data-query="${esc(q)}">
             ดูผลทั้งหมด →
           </button>`;
       }, 250);
@@ -267,6 +271,14 @@
         const q = navInput.value.trim();
         if (q) search(q);
       }
+    });
+
+    // "See all" button inside sfSection (rendered dynamically)
+    sfSection.addEventListener('click', e => {
+      const btn = e.target.closest('.sf-see-all');
+      if (!btn) return;
+      const q = btn.dataset.query || '';
+      if (q) search(q);
     });
   }
 
