@@ -733,6 +733,9 @@
             </div>
           </div>
 
+          <!-- Live search results (injected by courses-search.js) -->
+          <div id="sf-search-results" class="sf-section"></div>
+
           <div class="sf-foot">
             <span class="q">ไม่รู้จะเริ่มจากตรงไหน?</span>
             <a href="onboarding.html">ทำแบบทดสอบสั้น ๆ
@@ -1161,8 +1164,63 @@
     <div class="course-grid" id="grid-all"></div>
 
     <div style="text-align:center; margin-top:48px;">
-      <a href="https://mooc.chula.ac.th/course-all" target="_blank" rel="noopener" class="btn btn-outline btn-lg">ดูคอร์สทั้งหมด 280+ บน CHULA MOOC →</a>
+      <a href="#browse-all" class="btn btn-outline btn-lg" onclick="document.getElementById('browse-all').scrollIntoView({behavior:'smooth'})">สำรวจคอร์สทั้งหมด 1,900+ คอร์ส ↓</a>
     </div>
+  </div>
+</section>
+
+<!-- ───────── BROWSE ALL COURSES ───────── -->
+<section class="block" id="browse-all">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <span class="section-pill">คอร์สทั้งหมด</span>
+        <h2>สำรวจคอร์สทุกหลักสูตร</h2>
+        <p class="sub">รวมทุกหลักสูตรจาก CU MOOC, CU Neuron, MedUMore และแพลตฟอร์มอื่น ๆ — ค้นหาและกรองตามที่สนใจได้เลย</p>
+      </div>
+    </div>
+
+    <!-- Search bar -->
+    <div class="browse-search-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="browse-search-input" class="browse-search-input" placeholder="ค้นหาคอร์ส เช่น AI, ภาษาญี่ปุ่น, การลงทุน…" autocomplete="off" />
+      <button id="browse-search-clear" class="browse-search-clear" aria-label="ล้างการค้นหา">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <!-- Platform filter tabs -->
+    <div class="cat-tabs" style="margin-bottom:24px;" id="browse-platform-tabs">
+      <button class="cat-tab active" data-platform="">ทั้งหมด</button>
+      <button class="cat-tab" data-platform="CU MOOC">CU MOOC</button>
+      <button class="cat-tab" data-platform="CU Neuron">CU Neuron</button>
+      <button class="cat-tab" data-platform="MedUMore">MedUMore</button>
+      <button class="cat-tab" data-platform="Degree+">Degree+</button>
+    </div>
+
+    <!-- Loading state -->
+    <div id="all-courses-loading" style="text-align:center; padding:60px 0; color:var(--ink-500);">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:block;margin:0 auto 12px;opacity:.4"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      <p>กำลังโหลดข้อมูลคอร์ส…</p>
+    </div>
+
+    <!-- Empty state (shown when search has no results) -->
+    <div id="all-courses-empty" style="display:none; text-align:center; padding:60px 0; color:var(--ink-500);">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:block;margin:0 auto 12px;opacity:.3"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8 11h6"/></svg>
+      <p style="font-size:16px;font-weight:600;margin:0 0 6px;color:var(--ink-700)">ไม่พบคอร์สที่ตรงกับการค้นหา</p>
+      <p style="font-size:13.5px;margin:0">ลองใช้คำค้นหาอื่น หรือเลือกแพลตฟอร์มอื่น</p>
+    </div>
+
+    <!-- Result count + subhead -->
+    <div class="sub-head" style="margin-top:0;">
+      <h3><span class="swatch"></span> <span id="courses-count-badge"></span></h3>
+    </div>
+
+    <!-- Course grid -->
+    <div class="course-grid" id="all-courses-grid"></div>
+
+    <!-- Pagination -->
+    <div id="all-courses-pagination" style="margin-top:40px;"></div>
   </div>
 </section>
 
@@ -1871,6 +1929,7 @@ College of Extension and Lifelong Learning for the People, Chulalongkorn Univers
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script type="text/babel" src="tweaks-panel.jsx"></script>
 <script type="text/babel" src="tweaks.jsx"></script>
+<script src="courses-search.js"></script>
 
 
 <script>
