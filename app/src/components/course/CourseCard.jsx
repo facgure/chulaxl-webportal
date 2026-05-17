@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { toSlug } from '../../utils/slug';
+import { toSlug, courseNumericId } from '../../utils/slug';
 
 const PLATFORM_GRAD = {
   'CU MOOC':          'linear-gradient(135deg,#7A0040 0%,#9E0056 100%)',
@@ -28,9 +28,9 @@ export default function CourseCard({ course }) {
   const isFree = base === 0 && sale === 0;
   const instructor = c.instructors && c.instructors[0] ? c.instructors[0].name : '';
   const priceLabel = isFree ? 'ฟรี' : `${(sale || base).toLocaleString()} ฿`;
-  const slug = toSlug(c.id, c.title);
-  // External courses link out; internal ones use React Router
-  const isExternal = !c.id;
+  const numId = courseNumericId(c);
+  const slug = toSlug(numId, c.title);
+  const isExternal = !numId;
 
   if (isExternal) {
     return (

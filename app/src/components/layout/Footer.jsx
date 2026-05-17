@@ -9,46 +9,96 @@ export default function Footer() {
                 src="https://d1xutesu22jhtx.cloudfront.net/paas-landing-web/lll-cu-landing/logo/lll-logo.png"
                 alt="ChulaXL"
                 className="brand-logo"
-                style={{ height: 36 }}
               />
             </div>
-            <p>แพลตฟอร์มการเรียนรู้ตลอดชีวิตโดย<br />จุฬาลงกรณ์มหาวิทยาลัย</p>
-            <div className="foot-social">
-              <a href="#" aria-label="Facebook">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-              </a>
-              <a href="#" aria-label="YouTube">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg>
-              </a>
-              <a href="#" aria-label="Line">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.105.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-              </a>
+            <p className="foot-about">แพลตฟอร์มการเรียนรู้ตลอดชีวิตของจุฬาลงกรณ์มหาวิทยาลัย ดำเนินงานโดย Chula XL รวบรวมหลักสูตรที่เปิดให้ทุกคนเข้าถึงความรู้ระดับมหาวิทยาลัยได้ทุกที่ทุกเวลา</p>
+            <div className="foot-org">
+              วิทยาลัยส่งเสริมการเรียนรู้ตลอดชีวิตเพื่อประชาชนแห่งจุฬาลงกรณ์มหาวิทยาลัย (Chula XL)<br />
+              จุฬาลงกรณ์มหาวิทยาลัย ถนนพญาไท แขวงวังใหม่ เขตปทุมวัน กรุงเทพฯ 10330<br />
+              โทร 02-218-0000 · อีเมล hello@chulaxl.chula.ac.th
             </div>
           </div>
+
           <div className="foot-col">
-            <div className="foot-heading">หลักสูตร</div>
-            <a href="#">เทคโนโลยี & AI</a>
-            <a href="#">ภาษา</a>
-            <a href="#">การจัดการ</a>
-            <a href="#">สุขภาพ</a>
-            <a href="#">ศิลปะและการพัฒนาตนเอง</a>
+            <h4>ผู้เรียน</h4>
+            <ul>
+              <li><a href="#">เข้าสู่ระบบ / LMS</a></li>
+              <li><a href="#">หลักสูตรทั้งหมด</a></li>
+              <li><a href="#">เส้นทางอาชีพ</a></li>
+              <li><a href="#">ปริญญาบัตรชุดวิชา</a></li>
+              <li><a href="#">หลักสูตรฟรี</a></li>
+              <li><a href="#">คู่มือผู้เรียน</a></li>
+            </ul>
           </div>
+
           <div className="foot-col">
-            <div className="foot-heading">เกี่ยวกับ</div>
-            <a href="#">เกี่ยวกับ ChulaXL</a>
-            <a href="#">พันธมิตร</a>
-            <a href="#">สำหรับองค์กร</a>
-            <a href="#">ติดต่อเรา</a>
+            <h4>องค์กร & พันธมิตร</h4>
+            <ul>
+              <li><a href="#">ChulaXL for Business</a></li>
+              <li><a href="#">เป็นพันธมิตรกับเรา</a></li>
+              <li><a href="#">สอน / สร้างคอร์ส</a></li>
+              <li><a href="#">ข่าวประชาสัมพันธ์</a></li>
+              <li><a href="#">รายงานประจำปี</a></li>
+            </ul>
           </div>
+
           <div className="foot-col">
-            <div className="foot-heading">ช่วยเหลือ</div>
-            <a href="#">ศูนย์ช่วยเหลือ</a>
-            <a href="#">นโยบายความเป็นส่วนตัว</a>
-            <a href="#">ข้อกำหนดการใช้งาน</a>
+            <h4>เกี่ยวกับเรา</h4>
+            <ul>
+              <li><a href="#">เกี่ยวกับ ChulaXL</a></li>
+              <li><a href="#">วิสัยทัศน์ & พันธกิจ</a></li>
+              <li><a href="#">ทีมงาน</a></li>
+              <li><a href="#">ร่วมงานกับเรา</a></li>
+              <li><a href="#">ติดต่อเรา</a></li>
+            </ul>
+          </div>
+
+          <div className="foot-col col-extra">
+            <h4>ช่วยเหลือ</h4>
+            <ul>
+              <li><a href="#">ศูนย์ช่วยเหลือ</a></li>
+              <li><a href="#">คำถามที่พบบ่อย</a></li>
+              <li><a href="#">การชำระเงิน</a></li>
+              <li><a href="#">การคืนเงิน</a></li>
+              <li><a href="#">รายงานปัญหา</a></li>
+            </ul>
           </div>
         </div>
+
+        <div className="foot-partners">
+          <div className="foot-partners-head">Course Partners — เครือข่ายผู้ผลิตเนื้อหา</div>
+          <div className="foot-partner-grid">
+            {['คณะวิศวกรรมศาสตร์','คณะอักษรศาสตร์','คณะพาณิชยศาสตร์และการบัญชี','คณะแพทยศาสตร์',
+              'คณะเภสัชศาสตร์','คณะนิติศาสตร์','คณะรัฐศาสตร์','คณะครุศาสตร์',
+              'คณะวิทยาศาสตร์','คณะเศรษฐศาสตร์','คณะจิตวิทยา',
+              'กระทรวงกลาโหม','ธนาคารอาคารสงเคราะห์ (ธอส.)','กระทรวงวัฒนธรรม'].map(p => (
+              <a key={p} href="#">{p}</a>
+            ))}
+          </div>
+        </div>
+
         <div className="foot-bottom">
-          <span>© 2026 Chulalongkorn University · ChulaXL Lifelong Learning</span>
+          <div>© 2026 จุฬาลงกรณ์มหาวิทยาลัย · ChulaXL · สงวนลิขสิทธิ์</div>
+          <div className="links">
+            <a href="#">เงื่อนไขการใช้บริการ</a>
+            <a href="#">นโยบายความเป็นส่วนตัว</a>
+            <a href="#">PDPA</a>
+            <a href="#">การเข้าถึง</a>
+          </div>
+          <div className="foot-social">
+            <a href="#" aria-label="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-9h3l.5-4H13V6.5c0-1 .3-1.7 1.8-1.7H17V1.2C16.6 1.1 15.3 1 13.8 1 10.8 1 8.7 2.9 8.7 6.2V9H5.5v4h3.2v9H13z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/></svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.5c-.2-1.4-1-2.4-2.4-2.6C18.4 4.5 12 4.5 12 4.5s-6.4 0-8.6.4C2 5.1 1.2 6.1 1 7.5.6 9.7.6 12 .6 12s0 2.3.4 4.5c.2 1.4 1 2.4 2.4 2.6 2.2.4 8.6.4 8.6.4s6.4 0 8.6-.4c1.4-.2 2.2-1.2 2.4-2.6.4-2.2.4-4.5.4-4.5s0-2.3-.4-4.5zM10 15.5v-7l6 3.5-6 3.5z"/></svg>
+            </a>
+            <a href="#" aria-label="X (Twitter)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 3h2.9l-6.4 7.3L22 21h-5.8l-4.5-5.9L6.3 21H3.4l6.8-7.8L2 3h6l4.1 5.4L18.2 3zm-1 16h1.6L7 4.7H5.2L17.2 19z"/></svg>
+            </a>
+          </div>
         </div>
       </div>
     </footer>
