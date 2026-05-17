@@ -13,7 +13,7 @@ export function useCourses() {
     fetch('/courses.json')
       .then(r => r.json())
       .then(data => {
-        setAllCourses(data);
+        setAllCourses(Array.isArray(data) ? data : (data.courses ?? []));
         setLoading(false);
       })
       .catch(() => setLoading(false));

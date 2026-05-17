@@ -1,16 +1,27 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { idFromSlug } from '../utils/slug';
+import { idFromSlug, toSlug, courseNumericId } from '../utils/slug';
 
-// Mock prices (same as course-data.js)
 function mockPriceFor(id) {
   const prices = [2490, 1890, 990, 3290, 1490, 2290, 1290];
-  const olds = [4900, 3690, 1990, 5990, 2990, 4290, 2590];
+  const olds   = [4900, 3690, 1990, 5990, 2990, 4290, 2590];
   const i = id % prices.length;
   return { price: prices[i], old: olds[i] };
 }
 
-// Rich detail for featured course (id=285)
+const RELATED_TOPICS = [
+  'Generative AI', 'Prompt Engineering', 'LLM', 'ChatGPT',
+  'AI in Finance', 'Digital Literacy', 'Data Science', 'Machine Learning',
+];
+
+const REVIEW_BARS = [
+  { stars: 5, pct: 78 },
+  { stars: 4, pct: 14 },
+  { stars: 3, pct: 5 },
+  { stars: 2, pct: 2 },
+  { stars: 1, pct: 1 },
+];
+
 const RICH_DETAIL = {
   subtitle: 'เรียนรู้พื้นฐาน Generative AI ตั้งแต่หลักการทำงานของโมเดลภาษา การเขียน Prompt ที่ดี จนถึงการประยุกต์ใช้กับงานจริงในองค์กรการเงินและบริการ',
   rating: 4.8,
@@ -110,7 +121,17 @@ const GENERIC_DETAIL = {
     { title: 'บทเรียนที่ 3', lectures: 4, duration: '40 นาที', items: [] },
     { title: 'บทเรียนที่ 4', lectures: 4, duration: '40 นาที', items: [] },
   ],
-  instructor: { name: 'อาจารย์จุฬาลงกรณ์มหาวิทยาลัย', initials: 'CU', gradient: 'linear-gradient(135deg,#7A0040,#9E0056)', role: 'อาจารย์ จุฬาลงกรณ์มหาวิทยาลัย', rating: 4.8, reviews: 200, students: 3000, courses: 3, bio: 'อาจารย์ผู้เชี่ยวชาญจากจุฬาลงกรณ์มหาวิทยาลัย' },
+  instructor: {
+    name: 'อาจารย์จุฬาลงกรณ์มหาวิทยาลัย',
+    initials: 'CU',
+    gradient: 'linear-gradient(135deg,#7A0040,#9E0056)',
+    role: 'อาจารย์ จุฬาลงกรณ์มหาวิทยาลัย',
+    rating: 4.8,
+    reviews: 200,
+    students: 3000,
+    courses: 3,
+    bio: 'อาจารย์ผู้เชี่ยวชาญจากจุฬาลงกรณ์มหาวิทยาลัย',
+  },
   reviews: [],
 };
 
@@ -118,24 +139,36 @@ export default function CourseDetail() {
   const { slug } = useParams();
   const id = idFromSlug(slug);
   const [course, setCourse] = useState(null);
+  const [allCourses, setAllCourses] = useState([]);
   const [openSections, setOpenSections] = useState({ 0: true });
 
   useEffect(() => {
     fetch('/courses.json')
       .then(r => r.json())
       .then(data => {
-        const found = data.find(c => c.id === id);
+        const courses = Array.isArray(data) ? data : (data.courses ?? []);
+        setAllCourses(courses);
+        const found = courses.find(c => courseNumericId(c) === id);
         setCourse(found || null);
       })
-      .catch(() => setCourse(null));
+      .catch(() => {});
   }, [id]);
 
-  const detail = id === 285 ? RICH_DETAIL : GENERIC_DETAIL;
-  const { price, old } = mockPriceFor(id || 285);
+  const moocId = isNaN(id) ? null : id;
+  const detail = moocId === 285 ? RICH_DETAIL : GENERIC_DETAIL;
+  const { price, old } = mockPriceFor(moocId || 285);
   const discount = Math.round(100 - (price / old) * 100);
 
-  const title = course?.title || (id === 285 ? 'ปัญญาประดิษฐ์เชิงสร้างสรรค์และกระบวนการสร้างคำสั่ง (ธอส.)' : `หลักสูตร #${id}`);
-  const coverImg = course?.coverImageUrl || `https://mooc.chula.ac.th/img/upload/${encodeURIComponent(title)}.png`;
+  const title = course?.title || (moocId === 285
+    ? 'ปัญญาประดิษฐ์เชิงสร้างสรรค์และกระบวนการสร้างคำสั่ง (ธอส.)'
+    : `หลักสูตร #${moocId}`);
+  const coverImg = course?.coverImageUrl || null;
+  const categoryType = course?.category?.type || '';
+  const partnerLabel = course?.platform || '';
+
+  const relatedCourses = allCourses.filter(c => courseNumericId(c) !== id).slice(0, 4);
+  const alsoBought     = allCourses.filter(c => courseNumericId(c) !== id).slice(4, 8);
+  const moreByInstr    = allCourses.filter(c => courseNumericId(c) !== id).slice(8, 12);
 
   function toggleSection(i) {
     setOpenSections(prev => ({ ...prev, [i]: !prev[i] }));
@@ -143,33 +176,36 @@ export default function CourseDetail() {
 
   return (
     <div>
-      {/* ── Course Hero ── */}
-      <div className="cd-hero">
+      {/* ── Hero ── */}
+      <section className="cd-hero">
         <div className="wrap">
           <nav className="cd-breadcrumb">
             <Link to="/">หน้าแรก</Link>
-            <span className="sep">›</span>
-            <Link to="/">สำรวจหลักสูตร</Link>
+            {categoryType && <><span className="sep">›</span><Link to="/">{categoryType}</Link></>}
+            {partnerLabel && <><span className="sep">›</span><Link to="/">{partnerLabel}</Link></>}
             <span className="sep">›</span>
             <span className="current">{title}</span>
           </nav>
 
           <div className="cd-hero-grid">
-            <div>
-              <div className="cd-pills" id="cd-pills">
+            {/* ── Left column ── */}
+            <div className="cd-main">
+              <div className="cd-pills">
+                {categoryType && <span className="cd-pill cd-pill-cat">{categoryType}</span>}
+                {partnerLabel && <span className="cd-pill cd-pill-partner">{partnerLabel}</span>}
                 {detail.creditEligible && (
                   <span className="cd-pill cd-pill-credit">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14 }}><path d="M12 2 15 9l7 .5-5.5 4.5L18 21l-6-4-6 4 1.5-7L2 9.5 9 9z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 15 9l7 .5-5.5 4.5L18 21l-6-4-6 4 1.5-7L2 9.5 9 9z"/></svg>
                     เก็บ {detail.creditUnits} หน่วยกิตได้
                   </span>
                 )}
                 {detail.bestseller && <span className="cd-pill cd-pill-best">Bestseller</span>}
               </div>
 
-              <h1 className="cd-title" id="cd-title">{title}</h1>
-              <p className="cd-lede" id="cd-lede">{detail.subtitle || detail.description?.[0]}</p>
+              <h1 className="cd-title">{title}</h1>
+              <p className="cd-lede">{detail.subtitle || detail.description?.[0]}</p>
 
-              <div className="cd-hero-meta" id="cd-hero-meta">
+              <div className="cd-hero-meta">
                 {detail.rating && (
                   <span className="cd-rating">
                     <span className="num">{detail.rating}</span>
@@ -195,161 +231,334 @@ export default function CourseDetail() {
                 </span>
               </div>
 
-              <p id="cd-hero-instructor">
-                สอนโดย <a href="#cd-instr" style={{ color: 'var(--pink-700)', fontWeight: 600 }}>{detail.instructor?.name || 'อาจารย์จุฬาลงกรณ์มหาวิทยาลัย'}</a>
-              </p>
+              <div className="cd-hero-instructor">
+                สอนโดย <a href="#cd-instr">{detail.instructor?.name || 'อาจารย์จุฬาลงกรณ์มหาวิทยาลัย'}</a>
+              </div>
+
+              <div className="cd-video">
+                <img src={coverImg} alt="" onError={e => e.target.style.display = 'none'} />
+                <span className="vlabel">ดูตัวอย่างคอร์สนี้</span>
+                <span className="play">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </div>
             </div>
 
-            {/* Sticky CTA card */}
-            <div className="cd-sidebar">
+            {/* ── Right column — sticky CTA ── */}
+            <aside className="cd-aside">
               <div className="cd-cta-card">
-                <div className="cd-cta-preview">
-                  <img id="cd-cta-cover" src={coverImg} alt="" onError={e => e.target.style.display='none'} />
-                  <button className="cd-play-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                  </button>
+                <div className="cd-cta-cover">
+                  <img src={coverImg} alt="" onError={e => e.target.style.display = 'none'} />
                 </div>
                 <div className="cd-cta-body">
-                  <div id="cd-price-row">
+                  <div className="cd-price-row">
                     <span className="cd-price">฿{price.toLocaleString()}</span>
                     <span className="cd-price-old">฿{old.toLocaleString()}</span>
                     <span className="cd-price-disc">{discount}% OFF</span>
                   </div>
                   {detail.bestseller && (
-                    <div id="cd-urgency" className="cd-urgency">
+                    <div className="cd-urgency">
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
                       ราคาพิเศษเหลือ 2 วัน · มีผู้ลงทะเบียน {detail.enrolledRecent || 184} คนใน 24 ชั่วโมง
                     </div>
                   )}
-                  <Link to={`/lms/${slug}`} className="btn btn-primary" style={{ width: '100%', marginBottom: 8, textAlign: 'center', display: 'block' }}>
-                    เริ่มเรียนเลย
-                  </Link>
-                  <button className="btn btn-ghost" style={{ width: '100%' }}>เพิ่มในรายการโปรด</button>
-                  <ul className="cd-includes" id="cd-includes" style={{ marginTop: 16, paddingLeft: 0, listStyle: 'none' }}>
+
+                  <div className="cd-cta-buttons">
+                    <a href="#" className="btn btn-primary btn-block">ลงทะเบียนเรียน</a>
+                    <a href="#" className="btn btn-outline btn-block">ทดลองเรียนฟรี</a>
+                  </div>
+                  <div className="cd-guarantee">รับประกันคืนเงิน 30 วัน · ฟรีตลอดสำหรับเนื้อหา CHULA MOOC</div>
+
+                  <div className="cd-app-mini">
+                    <div className="cd-app-mini-label">เรียนต่อในแอปได้</div>
+                    <div className="cd-app-mini-badges">
+                      <a href="#" target="_blank" rel="noopener" aria-label="App Store">
+                        <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/download_on_the_app_store_badge_en.svg?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="" />
+                      </a>
+                      <a href="#" target="_blank" rel="noopener" aria-label="Google Play">
+                        <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://d3njjcbhbojbot.cloudfront.net/web/images/icons/en_generic_rgb_wo_45.png?auto=format%2Ccompress&dpr=2&w=152&h=45&q=40" alt="" />
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="cd-includes-head">คอร์สนี้รวม</div>
+                  <ul className="cd-includes">
                     <li>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 4H5c-1 0-2 1-2 2v12c0 1 1 2 2 2h14c1 0 2-1 2-2V6c0-1-1-2-2-2zM10 16V8l6 4z"/></svg>
                       วิดีโอ HD {detail.duration || '6 ชั่วโมง'}
                     </li>
                     <li>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 5h16v14H4z"/></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                       {detail.lectures || 24} บทเรียน
                     </li>
                     <li>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 11l3 3 8-8 M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
                       ประกาศนียบัตรอิเล็กทรอนิกส์
                     </li>
                     <li>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
                       เรียนได้ทุกที่ทุกเวลา
                     </li>
                   </ul>
+
+                  <div className="cd-share-row">
+                    <a href="#">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.5 10.5 7-4M8.5 13.5l7 4"/></svg>
+                      แชร์
+                    </a>
+                    <a href="#">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 4h12v17l-6-3.5L6 21z"/></svg>
+                      บันทึก
+                    </a>
+                    <a href="#">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 6 9 17l-5-5"/></svg>
+                      ของขวัญ
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
+            </aside>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* ── What you'll learn ── */}
-      <section className="wrap" style={{ marginTop: 48 }}>
-        <div className="wyl">
-          <h2 className="wyl-title">สิ่งที่จะได้เรียนรู้</h2>
-          <ul className="wyl-grid">
-            {detail.whatYoullLearn.map((item, i) => (
-              <li key={i}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 13l4 4L19 7"/></svg>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* ── Content ── */}
+      <section className="cd-content">
+        <div className="wrap">
+          <div className="cd-content-grid">
+            <main className="cd-body">
 
-        {/* ── Curriculum ── */}
-        <div className="cu-section" id="curriculum" style={{ marginTop: 48 }}>
-          <h2>เนื้อหาหลักสูตร</h2>
-          <p style={{ color: 'var(--ink-500)', fontSize: 14, marginBottom: 20 }}>
-            {detail.curriculum.length} ส่วน · {detail.lectures} บทเรียน · {detail.duration}
-          </p>
-          {detail.curriculum.map((sec, i) => (
-            <div key={i} className="cu-section-item">
-              <button
-                className="cu-section-hd"
-                onClick={() => toggleSection(i)}
-                style={{ width: '100%', textAlign: 'left', background: 'var(--ink-50)', border: '1px solid var(--ink-200)', borderRadius: 8, padding: '12px 16px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}
-              >
-                <span style={{ fontWeight: 600 }}>{sec.title}</span>
-                <span style={{ fontSize: 13, color: 'var(--ink-500)' }}>
-                  {sec.lectures} บทเรียน · {sec.duration} {openSections[i] ? '▲' : '▼'}
-                </span>
-              </button>
-              {openSections[i] && sec.items.length > 0 && (
-                <div style={{ border: '1px solid var(--ink-200)', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '8px 0' }}>
-                  {sec.items.map((item, j) => (
-                    <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', borderBottom: j < sec.items.length - 1 ? '1px solid var(--ink-100)' : 'none' }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 3l14 9-14 9V3z"/></svg>
-                      <span style={{ flex: 1, fontSize: 14 }}>{item.title}</span>
-                      {item.preview && <span style={{ fontSize: 11, color: 'var(--pink-700)', fontWeight: 600 }}>Preview</span>}
-                      <span style={{ fontSize: 13, color: 'var(--ink-500)' }}>{item.dur}</span>
+              {/* สิ่งที่จะได้เรียนรู้ */}
+              <div className="cd-section">
+                <h2>สิ่งที่คุณจะได้เรียนรู้</h2>
+                <div className="wyl">
+                  <div className="wyl-grid">
+                    {detail.whatYoullLearn.map((item, i) => (
+                      <div key={i} className="wyl-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* หัวข้อที่เกี่ยวข้อง */}
+              <div className="cd-section">
+                <h2>หัวข้อที่เกี่ยวข้อง</h2>
+                <div className="cd-topics">
+                  {RELATED_TOPICS.map((t, i) => (
+                    <a key={i} href="#" className="cd-topic">{t}</a>
+                  ))}
+                </div>
+              </div>
+
+              {/* เนื้อหาคอร์ส */}
+              <div className="cd-section">
+                <h2>เนื้อหาคอร์ส</h2>
+                <div className="cu-summary">
+                  <span><strong>{detail.curriculum.length}</strong> ส่วน</span>
+                  <span><strong>{detail.lectures}</strong> บทเรียน</span>
+                  <span><strong>{detail.duration}</strong></span>
+                </div>
+                <div>
+                  {detail.curriculum.map((sec, i) => (
+                    <div key={i} className={`cu-section${openSections[i] ? ' open' : ''}`}>
+                      <div className="cu-head" onClick={() => toggleSection(i)}>
+                        <div className="l">
+                          <span className="ch">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                          </span>
+                          {sec.title}
+                        </div>
+                        <div className="r">{sec.lectures} บทเรียน · {sec.duration}</div>
+                      </div>
+                      {sec.items.length > 0 && (
+                        <div className="cu-body">
+                          {sec.items.map((item, j) => (
+                            <div key={j} className="cu-lec">
+                              <div className="l">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 3l14 9-14 9V3z"/></svg>
+                                {item.title}
+                                {item.preview && <span className="preview">Preview</span>}
+                              </div>
+                              <span className="dur">{item.dur}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* คุณสมบัติผู้เรียน */}
+              <div className="cd-section">
+                <h2>คุณสมบัติผู้เรียน</h2>
+                <ul className="cd-list">
+                  {detail.requirements.map((r, i) => <li key={i}>{r}</li>)}
+                </ul>
+              </div>
+
+              {/* เกี่ยวกับคอร์สนี้ */}
+              <div className="cd-section">
+                <h2>เกี่ยวกับคอร์สนี้</h2>
+                <div className="cd-prose">
+                  {detail.description.map((p, i) => <p key={i}>{p}</p>)}
+                </div>
+              </div>
+
+              {/* คอร์สอื่นในเส้นทางเดียวกัน */}
+              {relatedCourses.length > 0 && (
+                <div className="cd-section">
+                  <h2>คอร์สอื่นในเส้นทางเดียวกัน</h2>
+                  <div className="cd-related">
+                    {relatedCourses.map(c => {
+                      const { price: rp, old: ro } = mockPriceFor(c.id);
+                      return (
+                        <Link key={c.href} to={`/course/${toSlug(courseNumericId(c), c.title)}`} className="cd-related-card">
+                          <div className="cover">
+                            <img src={c.coverImageUrl} alt="" onError={e => e.target.style.display = 'none'} />
+                            {c.platform && <span className="badge">{c.platform}</span>}
+                          </div>
+                          <div className="body">
+                            <div className="t">{c.title}</div>
+                            <div className="by">{c.section}</div>
+                            <div className="price"><span className="old">฿{ro.toLocaleString()}</span>฿{rp.toLocaleString()}</div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
-            </div>
-          ))}
-        </div>
 
-        {/* ── Requirements ── */}
-        <div style={{ marginTop: 40 }}>
-          <h2>ข้อกำหนดเบื้องต้น</h2>
-          <ul style={{ paddingLeft: 20 }}>
-            {detail.requirements.map((r, i) => <li key={i} style={{ marginBottom: 8, fontSize: 15 }}>{r}</li>)}
-          </ul>
-        </div>
-
-        {/* ── Instructor ── */}
-        {detail.instructor && (
-          <div id="cd-instr" style={{ marginTop: 48 }}>
-            <h2>ผู้สอน</h2>
-            <div className="instr-card" style={{ maxWidth: 480, marginTop: 16 }}>
-              <div className="instr-avatar" style={{ background: detail.instructor.gradient }}>
-                {detail.instructor.initials}
-                <div className="instr-check">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M5 13l4 4L19 7"/></svg>
+              {/* ผู้เรียนคอร์สนี้ยังเลือกเรียน */}
+              {alsoBought.length > 0 && (
+                <div className="cd-section">
+                  <h2>ผู้เรียนคอร์สนี้ยังเลือกเรียน</h2>
+                  <div className="cd-bought-list">
+                    {alsoBought.map(c => {
+                      const { price: ap } = mockPriceFor(c.id);
+                      return (
+                        <Link key={c.href} to={`/course/${toSlug(courseNumericId(c), c.title)}`} className="cd-bought-row">
+                          <div className="img">
+                            <img src={c.coverImageUrl} alt="" onError={e => e.target.style.display = 'none'} />
+                          </div>
+                          <div>
+                            <div className="b-title">{c.title}</div>
+                            <div className="b-meta">
+                              <span>{c.platform}</span>
+                              <span className="bs">Bestseller</span>
+                            </div>
+                          </div>
+                          <div className="b-price">฿{ap.toLocaleString()}</div>
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-              <div className="instr-info">
-                <div className="instr-name">{detail.instructor.name}</div>
-                <div className="instr-spec">{detail.instructor.role}</div>
-                <p style={{ fontSize: 14, color: 'var(--ink-600)', marginTop: 8 }}>{detail.instructor.bio}</p>
-                <div className="instr-foot">
-                  <span>★ {detail.instructor.rating} · {detail.instructor.reviews?.toLocaleString()} รีวิว</span>
-                  <span>{detail.instructor.students?.toLocaleString()} ผู้เรียน</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+              )}
 
-        {/* ── Reviews ── */}
-        {detail.reviews && detail.reviews.length > 0 && (
-          <div style={{ marginTop: 48, marginBottom: 64 }}>
-            <h2>รีวิวจากผู้เรียน</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16, marginTop: 20 }}>
-              {detail.reviews.map((r, i) => (
-                <div key={i} style={{ background: 'var(--ink-50)', borderRadius: 12, padding: 16, border: '1px solid var(--ink-200)' }}>
-                  <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 10 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: r.grad, display: 'grid', placeItems: 'center', color: '#fff', fontWeight: 700, fontSize: 13 }}>{r.initials}</div>
+              {/* ผู้สอน */}
+              {detail.instructor && (
+                <div id="cd-instr" className="cd-section">
+                  <h2>ผู้สอน</h2>
+                  <div className="instr-block">
+                    <div className="avatar-l" style={{ background: detail.instructor.gradient }}>
+                      {detail.instructor.initials}
+                    </div>
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: 14 }}>{r.name}</div>
-                      <div style={{ fontSize: 12, color: 'var(--ink-500)' }}>{'★'.repeat(r.stars)} · {r.when}</div>
+                      <div className="name">{detail.instructor.name}</div>
+                      <div className="role">{detail.instructor.role}</div>
+                      <div className="instr-stats">
+                        <div className="s">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                          <strong>{detail.instructor.rating}</strong> คะแนน
+                        </div>
+                        <div className="s">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                          <strong>{detail.instructor.reviews?.toLocaleString()}</strong> รีวิว
+                        </div>
+                        <div className="s">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                          <strong>{detail.instructor.students?.toLocaleString()}</strong> ผู้เรียน
+                        </div>
+                      </div>
+                      <p className="instr-bio">{detail.instructor.bio}</p>
                     </div>
                   </div>
-                  <p style={{ fontSize: 14, lineHeight: 1.6, margin: 0, color: 'var(--ink-700)' }}>{r.text}</p>
                 </div>
-              ))}
-            </div>
+              )}
+
+              {/* รีวิว */}
+              {detail.reviews && detail.reviews.length > 0 && (
+                <div className="cd-section">
+                  <h2>★ {detail.rating} · เสียงสะท้อนจากผู้เรียน</h2>
+                  <div className="rev-summary">
+                    <div>
+                      <div className="big">{detail.rating}</div>
+                      <div className="stars">{'★'.repeat(5)}</div>
+                      <div className="count">({detail.ratingCount?.toLocaleString()} รีวิว)</div>
+                    </div>
+                    <div className="rev-bars">
+                      {REVIEW_BARS.map(bar => (
+                        <div key={bar.stars} className="rev-bar">
+                          <span className="star">★</span>
+                          <span>{bar.stars}</span>
+                          <div className="track"><div className="fill" style={{ width: `${bar.pct}%` }} /></div>
+                          <span className="pct">{bar.pct}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="rev-list">
+                    {detail.reviews.map((r, i) => (
+                      <div key={i} className="rev-card">
+                        <div className="rev-head">
+                          <div className="rev-avatar" style={{ background: r.grad }}>{r.initials}</div>
+                          <div>
+                            <div className="rev-name">{r.name}</div>
+                            <div className="rev-rating">{'★'.repeat(r.stars)}</div>
+                            <div className="rev-when">{r.when}</div>
+                          </div>
+                        </div>
+                        <p className="rev-text">{r.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="btn btn-outline" style={{ marginTop: 16 }}>ดูรีวิวทั้งหมด →</button>
+                </div>
+              )}
+
+              {/* คอร์สอื่นโดยผู้สอนคนเดียวกัน */}
+              {moreByInstr.length > 0 && (
+                <div className="cd-section">
+                  <h2>คอร์สอื่นโดยผู้สอนคนเดียวกัน</h2>
+                  <div className="cd-related">
+                    {moreByInstr.map(c => {
+                      const { price: mp } = mockPriceFor(c.id);
+                      return (
+                        <Link key={c.href} to={`/course/${toSlug(courseNumericId(c), c.title)}`} className="cd-related-card">
+                          <div className="cover">
+                            <img src={c.coverImageUrl} alt="" onError={e => e.target.style.display = 'none'} />
+                          </div>
+                          <div className="body">
+                            <div className="t">{c.title}</div>
+                            <div className="by">{c.section}</div>
+                            <div className="price">฿{mp.toLocaleString()}</div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+            </main>
+            <div className="cd-body-aside-stub" />
           </div>
-        )}
+        </div>
       </section>
     </div>
   );
